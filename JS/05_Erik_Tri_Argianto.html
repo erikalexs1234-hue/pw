@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page - Web Dasar</title>
+    <style>
+        body {
+            font-family: Verdana, sans-serif;
+        }
+        .box-login {
+            border: 2px solid #333;
+            padding: 25px;
+            width: 320px;
+            margin: 60px auto;
+        }
+        .input-area {
+            margin-bottom: 12px;
+        }
+        input {
+            width: 100%;
+            margin-top: 6px;
+            padding: 5px;
+        }
+        .btn-area {
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="box-login">
+        <h3>Login Sistem</h3>
+
+        <div class="input-area">
+            <label for="user">User:</label>
+            <input type="text" id="user" placeholder="Isi username">
+        </div>
+
+        <div class="input-area">
+            <label for="pass">Password:</label>
+            <input type="password" id="pass" placeholder="Isi password">
+        </div>
+
+        <div class="btn-area">
+            <button id="loginBtn">Masuk</button>
+            <button id="resetBtn">Batal</button>
+        </div>
+    </div>
+
+    <script>
+        const tombolMasuk = document.getElementById('loginBtn');
+        const inputUser = document.getElementById('user');
+
+        tombolMasuk.addEventListener('click', function() {
+            inputUser.value = "User Aktif";
+            console.log("Login ditekan!");
+        });
+    </script>
+
+</body>
+</html>
