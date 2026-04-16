@@ -1,0 +1,209 @@
+<!-- File: index.html -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contoh Modul, Toast, dan Layer Hirarki</title>
+    <style>
+        /* CSS untuk toast dan layer hirarki */
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        /* Toast styling */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+        .toast {
+            background-color: #333;
+            color: #fff;
+            padding: 12px 20px;
+            margin-top: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            font-size: 14px;
+        }
+        .toast.show {
+            opacity: 1;
+        }
+        .toast.success { background-color: #28a745; }
+        .toast.error { background-color: #dc3545; }
+        .toast.info { background-color: #17a2b8; }
+
+        /* Layer hirarki contoh: modal, overlay, tooltip */
+        .btn {
+            padding: 8px 16px;
+            margin: 5px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-danger { background-color: #dc3545; }
+        .btn-secondary { background-color: #6c757d; }
+
+        /* Overlay (layer bawah) */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000; /* layer dasar */
+            display: none;
+        }
+        /* Modal (layer tengah) */
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 300px;
+            z-index: 1001; /* di atas overlay */
+            display: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        /* Tooltip (layer atas saat hover) */
+        .tooltip-demo {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted #ccc;
+            cursor: help;
+        }
+        .tooltip-demo .tooltip-text {
+            visibility: hidden;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            padding: 5px 10px;
+            border-radius: 6px;
+            position: absolute;
+            z-index: 1002; /* layer paling atas */
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            white-space: nowrap;
+        }
+        .tooltip-demo:hover .tooltip-text {
+            visibility: visible;
+        }
+    </style>
+</head>
+<body>
+    <h1>Demo Modul, Toast, dan Layer Hirarki</h1>
+
+    <!-- Bagian untuk menguji modul -->
+    <div>
+        <h2>1. Modul (Math Utils)</h2>
+        <button id="btnModul" class="btn">Jalankan Fungsi dari Modul</button>
+        <p id="hasilModul"></p>
+    </div>
+
+    <!-- Bagian untuk Toast -->
+    <div>
+        <h2>2. Toast Notifikasi</h2>
+        <button id="toastSuccess" class="btn">Toast Sukses</button>
+        <button id="toastError" class="btn btn-danger">Toast Error</button>
+        <button id="toastInfo" class="btn btn-secondary">Toast Info</button>
+    </div>
+
+    <!-- Bagian untuk Layer Hirarki -->
+    <div>
+        <h2>3. Layer Hirarki (z-index)</h2>
+        <button id="showModalBtn" class="btn">Buka Modal</button>
+        <div class="tooltip-demo">
+            Hover untuk tooltip (layer atas)
+            <span class="tooltip-text">Tooltip z-index 1002</span>
+        </div>
+        <p>Perhatikan urutan tumpukan: <strong>Overlay (z-index 1000) → Modal (1001) → Tooltip (1002)</strong></p>
+    </div>
+
+    <!-- Container untuk toast -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Overlay dan Modal untuk layer hirarki -->
+    <div id="overlay" class="overlay"></div>
+    <div id="modal" class="modal">
+        <h3>Ini Modal</h3>
+        <p>Modal berada di layer atas overlay (z-index 1001).</p>
+        <button id="closeModalBtn" class="btn btn-secondary">Tutup</button>
+    </div>
+
+    <script type="module">
+        // ========== 1. MODUL ==========
+        // Membuat modul sederhana secara internal (dalam satu file module)
+        // Biasanya dipisah ke file terpisah, tapi di sini kita buat objek modul.
+        const mathModule = (() => {
+            // private
+            const tambah = (a, b) => a + b;
+            const kali = (a, b) => a * b;
+            // ekspor
+            return { tambah, kali };
+        })();
+
+        // Atau kita bisa buat module dengan export/import jika ingin memisah file.
+        // Untuk demo, kita gunakan object module di atas.
+        
+        document.getElementById('btnModul').addEventListener('click', () => {
+            const hasilTambah = mathModule.tambah(10, 5);
+            const hasilKali = mathModule.kali(3, 7);
+            document.getElementById('hasilModul').innerHTML = `Hasil dari modul: <br> tambah(10,5) = ${hasilTambah} <br> kali(3,7) = ${hasilKali}`;
+            showToast(`Modul berhasil dijalankan!`, 'success');
+        });
+
+        // ========== 2. TOAST ==========
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerText = message;
+            container.appendChild(toast);
+            // animasi muncul
+            setTimeout(() => toast.classList.add('show'), 10);
+            // hilang setelah 3 detik
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        document.getElementById('toastSuccess').addEventListener('click', () => showToast('Data berhasil disimpan!', 'success'));
+        document.getElementById('toastError').addEventListener('click', () => showToast('Terjadi kesalahan!', 'error'));
+        document.getElementById('toastInfo').addEventListener('click', () => showToast('Info: Periksa koneksi Anda', 'info'));
+
+        // ========== 3. LAYER HIRARKI ==========
+        const overlay = document.getElementById('overlay');
+        const modal = document.getElementById('modal');
+        const showModalBtn = document.getElementById('showModalBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+
+        function openModal() {
+            overlay.style.display = 'block';
+            modal.style.display = 'block';
+            showToast('Modal terbuka, perhatikan lapisan (overlay di bawah modal)', 'info');
+        }
+        function closeModal() {
+            overlay.style.display = 'none';
+            modal.style.display = 'none';
+        }
+        showModalBtn.addEventListener('click', openModal);
+        closeModalBtn.addEventListener('click', closeModal);
+        // klik overlay juga bisa menutup
+        overlay.addEventListener('click', closeModal);
+        
+        // Demo tambahan: menjelaskan z-index lewat console
+        console.log('Layer hirarki: overlay z-index=1000, modal z-index=1001, tooltip z-index=1002');
+    </script>
+</body>
+</html>
