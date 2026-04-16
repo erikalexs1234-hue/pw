@@ -1,5 +1,7 @@
-berikut adalah penjelasan yang terperinci secara menyeluruh menggunakan kerangka PREP (Point, Reason, Example, Point). 
+berikut adalah penjelasan yang terperinci secara menyeluruh menggunakan kerangka PREP (Point, Reason, Example, Point).
+
 Materi ini mencakup Console, Selector (ID/Class/Tag), DOM & Vanilla JavaScript, Event Listening, dan Data Attribute.
+
 
 1. Console (Konsol JavaScript)
 P (Point): Console adalah panel diagnostik internal pada web browser yang berfungsi sebagai saluran komunikasi eksklusif antara kode program yang sedang berjalan dengan pengembang (developer). Ini adalah alat bantu yang tidak terlihat oleh pengguna akhir (end-user).
