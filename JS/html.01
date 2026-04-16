@@ -71,25 +71,6 @@ button {
 
 #btnLogin { background-color: #28a745; color: white; border: none; }
 #btnCancel { background-color: #dc3545; color: white; border: none; }
-
-/ 1. DOM Selector (Mengambil elemen berdasarkan ID)
-const inputUser = document.getElementById('username');
-const inputPass = document.getElementById('password');
-const btnLogin = document.getElementById('btnLogin');
-const btnCancel = document.getElementById('btnCancel');
-
-// 2. Event Listener (Menjalankan fungsi saat tombol diklik)
-btnLogin.addEventListener('click', function() {
-    const user = inputUser.value;
-    const pass = inputPass.value;
-
-    if (user === "admin" && pass === "123") {
-        alert("Login Berhasil! Selamat datang " + user);
-    } else {
-        alert("Username atau Password salah.");
-    }
-});
-
 btnCancel.addEventListener('click', function() {
     // Mengosongkan kembali input
     inputUser.value = "";
