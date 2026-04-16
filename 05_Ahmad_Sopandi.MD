@@ -1,5 +1,4 @@
 berikut adalah penjelasan yang terperinci secara menyeluruh menggunakan kerangka PREP (Point, Reason, Example, Point).
-
 Materi ini mencakup Console, Selector (ID/Class/Tag), DOM & Vanilla JavaScript, Event Listening, dan Data Attribute.
 
 
