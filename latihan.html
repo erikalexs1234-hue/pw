@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelompok - Portofolio</title>
+    <title>Kelompok Robot - Portofolio</title>
     <style>
-        /* CSS Reset & Base Styles */
+        /* CSS Tetap Sama */
         * {
             margin: 0;
             padding: 0;
@@ -13,14 +13,11 @@
         }
 
         :root {
-            /* Sistem Warna - Aturan 60-30-10 */
-            --primary-bg: #0B0F1E;      /* 60% - Biru Navy Gelap */
-            --secondary-bg: #1E2340;    /* 30% - Biru Slate */
-            --accent: #C9A84C;          /* 10% - Emas */
+            --primary-bg: #0B0F1E;
+            --secondary-bg: #1E2340;
+            --accent: #C9A84C;
             --text-primary: #FFFFFF;
             --text-secondary: #B8C1D9;
-            
-            /* Rasio Emas */
             --golden-ratio: 1.618;
             --spacing-base: 1rem;
             --spacing-golden: calc(var(--spacing-base) * var(--golden-ratio));
@@ -34,7 +31,6 @@
             overflow-x: hidden;
         }
 
-        /* Navigasi */
         nav {
             background-color: var(--secondary-bg);
             padding: 1.5rem 0;
@@ -87,7 +83,21 @@
             cursor: pointer;
         }
 
-        /* Bagian Hero - Tata Letak Rasio Emas */
+        .layer-toggle-btn {
+            background: var(--accent);
+            border: none;
+            color: var(--primary-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .layer-toggle-btn:hover {
+            background: #dbb956;
+        }
+
         .hero {
             min-height: 100vh;
             display: flex;
@@ -113,7 +123,7 @@
             margin: 0 auto;
             padding: 0 2rem;
             display: grid;
-            grid-template-columns: 1.618fr 1fr; /* Rasio Emas */
+            grid-template-columns: 1.618fr 1fr;
             gap: 3rem;
             align-items: center;
             position: relative;
@@ -222,7 +232,6 @@
             50% { transform: translateY(-20px); }
         }
 
-        /* Section Base Styles */
         section {
             padding: calc(var(--spacing-golden) * 3) 0;
         }
@@ -251,14 +260,13 @@
             margin: 0 auto;
         }
 
-        /* Bagian Tentang */
         .about {
             background-color: var(--secondary-bg);
         }
 
         .about-content {
             display: grid;
-            grid-template-columns: 1fr 1.618fr; /* Rasio Emas */
+            grid-template-columns: 1fr 1.618fr;
             gap: 3rem;
             align-items: center;
         }
@@ -293,7 +301,6 @@
             line-height: 1.8;
         }
 
-        /* Bagian Keahlian */
         .skills-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -341,7 +348,6 @@
             font-size: 1.2rem;
         }
 
-        /* Bagian Proyek */
         .projects {
             background-color: var(--secondary-bg);
         }
@@ -422,7 +428,6 @@
             color: #dbb956;
         }
 
-        /* Bagian Kontak */
         .contact-content {
             max-width: 800px;
             margin: 0 auto;
@@ -473,7 +478,6 @@
             color: var(--accent);
         }
 
-        /* Footer */
         footer {
             background-color: var(--secondary-bg);
             padding: 2rem 0;
@@ -503,7 +507,187 @@
             color: var(--accent);
         }
 
-        /* Desain Responsif */
+        .toast-container {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            background-color: var(--secondary-bg);
+            color: var(--text-primary);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            min-width: 300px;
+            max-width: 400px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            animation: slideIn 0.3s ease;
+            border-left: 4px solid var(--accent);
+        }
+
+        .toast.success { border-left-color: #4CAF50; }
+        .toast.error { border-left-color: #f44336; }
+        .toast.info { border-left-color: #2196F3; }
+        .toast.warning { border-left-color: #ff9800; }
+
+        .toast-icon { font-size: 1.5rem; flex-shrink: 0; }
+        .toast-content { flex: 1; }
+        .toast-title { font-weight: 600; margin-bottom: 0.25rem; }
+        .toast-message { font-size: 0.9rem; color: var(--text-secondary); }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .toast-close:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(400px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(400px); opacity: 0; }
+        }
+
+        .toast.removing { animation: slideOut 0.3s ease forwards; }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal {
+            background-color: var(--secondary-bg);
+            border-radius: 12px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow: hidden;
+            box-shadow: 0 10px 60px rgba(0, 0, 0, 0.5);
+            animation: scaleIn 0.3s ease;
+        }
+
+        .modal-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 1.5rem;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+
+        .modal-body { padding: 2rem; overflow-y: auto; max-height: calc(80vh - 140px); }
+        .modal-body p { color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem; }
+        .modal-footer {
+            padding: 1.5rem 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes scaleIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .layer-panel {
+            position: fixed;
+            right: -350px;
+            top: 80px;
+            width: 350px;
+            height: calc(100vh - 80px);
+            background-color: var(--secondary-bg);
+            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
+            z-index: 999;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .layer-panel.active { right: 0; }
+        .layer-panel-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            background-color: var(--secondary-bg);
+            z-index: 1;
+        }
+
+        .layer-panel-title { font-size: 1.2rem; font-weight: 700; color: var(--accent); }
+        .layer-panel-body { padding: 1rem; }
+
+        .layer-item {
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            background-color: var(--primary-bg);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .layer-item:hover { background-color: rgba(201, 168, 76, 0.1); border-left-color: var(--accent); }
+        .layer-item.active { border-left-color: var(--accent); background-color: rgba(201, 168, 76, 0.15); }
+        .layer-name { font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem; }
+        .layer-type { font-size: 0.85rem; color: var(--text-secondary); }
+        .layer-children { margin-left: 1.5rem; margin-top: 0.5rem; }
+        .layer-toggle { display: inline-block; width: 20px; color: var(--accent); cursor: pointer; user-select: none; }
+
         @media (max-width: 768px) {
             nav ul {
                 display: none;
@@ -516,51 +700,25 @@
                 padding: 1rem 2rem;
                 box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
             }
-
-            nav ul.active {
-                display: flex;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-            }
-
-            .hero .container {
-                grid-template-columns: 1fr;
-                text-align: center;
-                padding-top: 2rem;
-            }
-
-            .hero-image {
-                order: -1;
-            }
-
-            .cta-buttons {
-                justify-content: center;
-            }
-
-            .about-content {
-                grid-template-columns: 1fr;
-            }
-
-            .project-links {
-                flex-direction: column;
-            }
+            nav ul.active { display: flex; }
+            .mobile-menu-btn { display: block; }
+            .hero .container { grid-template-columns: 1fr; text-align: center; padding-top: 2rem; }
+            .hero-image { order: -1; }
+            .cta-buttons { justify-content: center; }
+            .about-content { grid-template-columns: 1fr; }
+            .project-links { flex-direction: column; }
+            .toast-container { right: 10px; left: 10px; }
+            .toast { min-width: auto; }
+            .layer-panel { width: 100%; right: -100%; }
         }
 
-        /* Smooth Scrolling */
-        html {
-            scroll-behavior: smooth;
-        }
-
-        /* Selection Color */
-        ::selection {
-            background-color: var(--accent);
-            color: var(--primary-bg);
-        }
+        html { scroll-behavior: smooth; }
+        ::selection { background-color: var(--accent); color: var(--primary-bg); }
     </style>
 </head>
 <body>
+    <div class="toast-container" id="toastContainer"></div>
+
     <nav>
         <div class="container">
             <a href="#" class="logo">KR</a>
@@ -571,19 +729,27 @@
                 <li><a href="#skills" onclick="closeMenu()">Keahlian</a></li>
                 <li><a href="#projects" onclick="closeMenu()">Proyek</a></li>
                 <li><a href="#contact" onclick="closeMenu()">Kontak</a></li>
+                <li><button class="layer-toggle-btn" onclick="toggleLayerPanel()">Layer</button></li>
             </ul>
         </div>
     </nav>
+
+    <div class="layer-panel" id="layerPanel">
+        <div class="layer-panel-header">
+            <div class="layer-panel-title">Hierarki Layer</div>
+        </div>
+        <div class="layer-panel-body" id="layerPanelBody"></div>
+    </div>
 
     <section id="home" class="hero">
         <div class="container">
             <div class="hero-content">
                 <h1>Halo, Saya Kelompok Robot</h1>
                 <h2>Full Stack Developer & Designer</h2>
-                <p>Saya merancang pengalaman web yang indah dan fungsional dengan menggabungkan desain elegan dan fungsionalitas yang kuat. Berdedikasi untuk menciptakan solusi yang memberikan dampak nyata.</p>
+                <p>Saya merancang pengalaman web yang indah dan fungsional dengan menggabungkan desain elegan dan fungsionalitas yang kuat. Bersemangat dalam menciptakan solusi yang bermakna.</p>
                 <div class="cta-buttons">
-                    <a href="#projects" class="btn btn-primary">Lihat Karya Saya</a>
-                    <a href="#contact" class="btn btn-secondary">Hubungi Saya</a>
+                    <a href="#projects" class="btn btn-primary" onclick="showToast('success', 'Navigasi', 'Menggulung ke bagian proyek')">Lihat Karya Saya</a>
+                    <a href="#contact" class="btn btn-secondary" onclick="showToast('info', 'Kontak', 'Mari terhubung!')">Hubungi Saya</a>
                 </div>
             </div>
             <div class="hero-image">
@@ -598,7 +764,7 @@
         <div class="container">
             <div class="section-header">
                 <h2>Tentang Saya</h2>
-                <p>Pengembang yang bersemangat dengan perhatian tinggi pada desain dan detail</p>
+                <p>Pengembang yang berdedikasi dengan perhatian tinggi pada desain dan detail</p>
             </div>
             <div class="about-content">
                 <div class="about-stats">
@@ -616,9 +782,9 @@
                     </div>
                 </div>
                 <div class="about-text">
-                    <p>Saya adalah seorang full-stack developer dengan lebih dari 5 tahun pengalaman dalam membangun aplikasi web yang tidak hanya fungsional tetapi juga estetis dan mudah digunakan.</p>
-                    <p>Perjalanan saya di dunia teknologi dimulai dari rasa penasaran tentang bagaimana cara kerja web, yang kemudian berubah menjadi gairah mendalam terhadap pemrograman dan desain. Saya ahli dalam framework JavaScript modern, desain responsif, dan menciptakan pengalaman pengguna yang mulus.</p>
-                    <p>Saat sedang tidak menulis kode, saya biasanya mengeksplorasi teknologi baru, berkontribusi pada proyek open-source, atau berbagi pengetahuan melalui blog dan membimbing pengembang muda.</p>
+                    <p>Saya adalah seorang full-stack developer dengan lebih dari 5 tahun pengalaman dalam membuat aplikasi web yang tidak hanya fungsional tetapi juga indah dan ramah pengguna.</p>
+                    <p>Perjalanan saya di dunia teknologi dimulai dari rasa penasaran tentang cara kerja web, yang kemudian berkembang menjadi gairah mendalam dalam pemrograman dan desain. Saya ahli dalam framework JavaScript modern, desain responsif, dan pembuatan pengalaman pengguna yang mulus.</p>
+                    <p>Saat tidak sedang menulis kode, saya biasanya mengeksplorasi teknologi baru, berkontribusi pada proyek open-source, atau berbagi pengetahuan melalui blog dan mentoring pengembang pemula.</p>
                 </div>
             </div>
         </div>
@@ -627,7 +793,7 @@
     <section id="skills">
         <div class="container">
             <div class="section-header">
-                <h2>Keahlian & Kepakaran</h2>
+                <h2>Keahlian & Spesialisasi</h2>
                 <p>Teknologi dan alat yang saya gunakan</p>
             </div>
             <div class="skills-grid">
@@ -679,15 +845,15 @@
                     <div class="project-image">🚀</div>
                     <div class="project-content">
                         <h3>Platform E-Commerce</h3>
-                        <p>Platform e-commerce lengkap dengan integrasi pembayaran, autentikasi pengguna, dan dashboard admin.</p>
+                        <p>Platform e-commerce fungsional dengan integrasi pembayaran, autentikasi pengguna, dan dashboard admin.</p>
                         <div class="project-tags">
                             <span class="tag">React</span>
                             <span class="tag">Node.js</span>
                             <span class="tag">MongoDB</span>
                         </div>
                         <div class="project-links">
-                            <a href="#">Lihat Proyek →</a>
-                            <a href="#">GitHub →</a>
+                            <a href="#" onclick="openProjectModal('Platform E-Commerce', 'Solusi e-commerce komprehensif dengan fitur canggih termasuk manajemen inventaris real-time, pemrosesan pembayaran aman, autentikasi pengguna, dan dashboard admin yang kuat untuk mengelola produk, pesanan, dan pelanggan.'); return false;">Lihat Proyek →</a>
+                            <a href="#" onclick="showToast('info', 'GitHub', 'Membuka repositori...'); return false;">GitHub →</a>
                         </div>
                     </div>
                 </div>
@@ -702,72 +868,24 @@
                             <span class="tag">Chart.js</span>
                         </div>
                         <div class="project-links">
-                            <a href="#">Lihat Proyek →</a>
-                            <a href="#">GitHub →</a>
+                            <a href="#" onclick="openProjectModal('Dashboard Media Sosial', 'Platform analitik tingkat lanjut yang menampilkan visualisasi data real-time, alat pelaporan komprehensif, integrasi multi-platform, dan dashboard yang dapat disesuaikan.'); return false;">Lihat Proyek →</a>
+                            <a href="#" onclick="showToast('info', 'GitHub', 'Membuka repositori...'); return false;">GitHub →</a>
                         </div>
                     </div>
                 </div>
                 <div class="project-card">
                     <div class="project-image">🎨</div>
                     <div class="project-content">
-                        <h3>Pustaka Sistem Desain</h3>
-                        <p>Pustaka komponen UI komprehensif dengan situs dokumentasi, digunakan oleh berbagai tim dalam produksi.</p>
+                        <h3>Library Design System</h3>
+                        <p>Library komponen UI komprehensif dengan situs dokumentasi, digunakan oleh banyak tim dalam produksi.</p>
                         <div class="project-tags">
                             <span class="tag">React</span>
                             <span class="tag">TypeScript</span>
                             <span class="tag">Storybook</span>
                         </div>
                         <div class="project-links">
-                            <a href="#">Lihat Proyek →</a>
-                            <a href="#">GitHub →</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-card">
-                    <div class="project-image">🤖</div>
-                    <div class="project-content">
-                        <h3>AI Content Generator</h3>
-                        <p>Aplikasi web yang memanfaatkan AI untuk menghasilkan dan mengoptimalkan konten untuk berbagai platform.</p>
-                        <div class="project-tags">
-                            <span class="tag">Next.js</span>
-                            <span class="tag">OpenAI</span>
-                            <span class="tag">PostgreSQL</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="#">Lihat Proyek →</a>
-                            <a href="#">GitHub →</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-card">
-                    <div class="project-image">📊</div>
-                    <div class="project-content">
-                        <h3>Alat Manajemen Proyek</h3>
-                        <p>Platform manajemen proyek kolaboratif dengan pelacakan tugas, komunikasi tim, dan berbagi file.</p>
-                        <div class="project-tags">
-                            <span class="tag">React</span>
-                            <span class="tag">Firebase</span>
-                            <span class="tag">Material-UI</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="#">Lihat Proyek →</a>
-                            <a href="#">GitHub →</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-card">
-                    <div class="project-image">🌐</div>
-                    <div class="project-content">
-                        <h3>Portfolio Builder</h3>
-                        <p>Platform SaaS yang memungkinkan pengguna membuat situs portofolio profesional dengan template kustom.</p>
-                        <div class="project-tags">
-                            <span class="tag">Vue.js</span>
-                            <span class="tag">Django</span>
-                            <span class="tag">AWS</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="#">Lihat Proyek →</a>
-                            <a href="#">GitHub →</a>
+                            <a href="#" onclick="openProjectModal('Library Design System', 'Library komponen UI kelas enterprise yang dibangun dengan React dan TypeScript, menampilkan dokumentasi lengkap, kepatuhan aksesibilitas, dan dukungan tema.'); return false;">Lihat Proyek →</a>
+                            <a href="#" onclick="showToast('info', 'GitHub', 'Membuka repositori...'); return false;">GitHub →</a>
                         </div>
                     </div>
                 </div>
@@ -779,22 +897,22 @@
         <div class="container">
             <div class="section-header">
                 <h2>Hubungi Saya</h2>
-                <p>Mari bekerja sama untuk proyek Anda selanjutnya</p>
+                <p>Mari bekerja sama dalam proyek Anda berikutnya</p>
             </div>
             <div class="contact-content">
-                <p>Saya selalu terbuka untuk mendiskusikan proyek baru, ide kreatif, atau peluang untuk menjadi bagian dari visi Anda. Jangan ragu untuk menyapa!</p>
+                <p>Saya selalu terbuka untuk mendiskusikan proyek baru, ide kreatif, atau peluang untuk menjadi bagian dari visi Anda. Jangan ragu untuk menghubungi saya!</p>
                 <div class="contact-methods">
-                    <div class="contact-card">
+                    <div class="contact-card" onclick="showToast('success', 'Email', 'Membuka aplikasi email...')">
                         <div class="contact-icon">📧</div>
                         <h3>Email</h3>
-                        <a href="mailto:john.doe@example.com">Robot.doe@example.com</a>
+                        <a href="mailto:john.doe@example.com">Robot@example.com</a>
                     </div>
-                    <div class="contact-card">
+                    <div class="contact-card" onclick="showToast('info', 'LinkedIn', 'Membuka profil LinkedIn...')">
                         <div class="contact-icon">💼</div>
                         <h3>LinkedIn</h3>
                         <a href="#">linkedin.com/in/Robot</a>
                     </div>
-                    <div class="contact-card">
+                    <div class="contact-card" onclick="showToast('info', 'GitHub', 'Membuka profil GitHub...')">
                         <div class="contact-icon">🐙</div>
                         <h3>GitHub</h3>
                         <a href="#">github.com/Robot</a>
@@ -807,17 +925,32 @@
     <footer>
         <div class="container">
             <div class="social-links">
-                <a href="#" title="Twitter">𝕏</a>
-                <a href="#" title="GitHub">⚡</a>
-                <a href="#" title="LinkedIn">💼</a>
-                <a href="#" title="Dribbble">🎨</a>
+                <a href="#" onclick="showToast('info', 'Twitter', 'Membuka profil Twitter...'); return false;">🐦</a>
+                <a href="#" onclick="showToast('info', 'LinkedIn', 'Membuka profil LinkedIn...'); return false;">💼</a>
+                <a href="#" onclick="showToast('info', 'GitHub', 'Membuka profil GitHub...'); return false;">🐙</a>
+                <a href="#" onclick="showToast('info', 'Email', 'Membuka aplikasi email...'); return false;">📧</a>
             </div>
-            <p>&copy; 2026 John Doe. Dibuat dengan semangat dan kode.</p>
+            <p>&copy; 2024 Kelompok Robot. Hak Cipta Dilindungi Undang-Undang.</p>
         </div>
     </footer>
 
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Judul Modal</h3>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <p>Konten modal di sini.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Tutup</button>
+                <button class="btn btn-primary" onclick="handleModalAction()">Pelajari Lebih Lanjut</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Toggle Menu Mobile
         function toggleMenu() {
             const navMenu = document.getElementById('navMenu');
             navMenu.classList.toggle('active');
@@ -828,37 +961,159 @@
             navMenu.classList.remove('active');
         }
 
-        // Smooth scroll dengan offset untuk navigasi tetap
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    const offset = 80;
-                    const elementPosition = target.getBoundingClientRect().top;
-                    const offsetPosition = elementPosition + window.pageYOffset - offset;
+        let toastIdCounter = 0;
+        function showToast(type = 'info', title = 'Notifikasi', message = '') {
+            const container = document.getElementById('toastContainer');
+            const toastId = `toast-${toastIdCounter++}`;
+            const icons = { success: '✓', error: '✕', warning: '⚠', info: 'ℹ' };
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.id = toastId;
+            toast.innerHTML = `
+                <div class="toast-icon">${icons[type] || icons.info}</div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    ${message ? `<div class="toast-message">${message}</div>` : ''}
+                </div>
+                <button class="toast-close" onclick="removeToast('${toastId}')">×</button>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => { removeToast(toastId); }, 5000);
+        }
 
-                    window.scrollTo({
-                        top: offsetPosition,
-                        behavior: 'smooth'
+        function removeToast(toastId) {
+            const toast = document.getElementById(toastId);
+            if (toast) {
+                toast.classList.add('removing');
+                setTimeout(() => { toast.remove(); }, 300);
+            }
+        }
+
+        let currentProjectTitle = '';
+        function openModal(title, content) {
+            const modal = document.getElementById('modalOverlay');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            modalTitle.textContent = title;
+            modalBody.innerHTML = content;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modalOverlay');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function closeModalOnOverlay(event) {
+            if (event.target.id === 'modalOverlay') closeModal();
+        }
+
+        function openProjectModal(title, description) {
+            currentProjectTitle = title;
+            const content = `
+                <p>${description}</p>
+                <h4 style="color: var(--accent); margin-top: 1.5rem; margin-bottom: 0.5rem;">Fitur Utama:</h4>
+                <ul style="color: var(--text-secondary); line-height: 2; margin-left: 1.5rem;">
+                    <li>Desain modern dan responsif</li>
+                    <li>Dioptimalkan untuk performa</li>
+                    <li>Arsitektur yang dapat ditingkatkan (Scalable)</li>
+                    <li>Dokumentasi lengkap</li>
+                </ul>
+            `;
+            openModal(title, content);
+        }
+
+        function handleModalAction() {
+            showToast('success', currentProjectTitle, 'Detail proyek berhasil dimuat!');
+            closeModal();
+        }
+
+        function toggleLayerPanel() {
+            const panel = document.getElementById('layerPanel');
+            panel.classList.toggle('active');
+            if (panel.classList.contains('active')) {
+                generateLayerHierarchy();
+                showToast('info', 'Layer', 'Panel hierarki layer dibuka');
+            }
+        }
+
+        function generateLayerHierarchy() {
+            const body = document.getElementById('layerPanelBody');
+            const sections = [
+                { id: 'home', name: 'Bagian Hero', type: 'Section', children: ['Konten Hero', 'Gambar Hero'] },
+                { id: 'about', name: 'Bagian Tentang', type: 'Section', children: ['Kartu Statistik', 'Teks Tentang'] },
+                { id: 'skills', name: 'Bagian Keahlian', type: 'Section', children: ['Keahlian Frontend', 'Keahlian Backend', 'Alat'] },
+                { id: 'projects', name: 'Bagian Proyek', type: 'Section', children: ['Grid Proyek', 'Kartu Proyek'] },
+                { id: 'contact', name: 'Bagian Kontak', type: 'Section', children: ['Metode Kontak', 'Link Sosial'] }
+            ];
+
+            let html = '';
+            sections.forEach(section => {
+                html += `
+                    <div class="layer-item" onclick="scrollToSection('${section.id}'); highlightLayer(this)">
+                        <div class="layer-name">
+                            <span class="layer-toggle" onclick="toggleLayerChildren(event, 'children-${section.id}')">▼</span>
+                            ${section.name}
+                        </div>
+                        <div class="layer-type">${section.type}</div>
+                    </div>
+                `;
+                if (section.children) {
+                    html += `<div class="layer-children" id="children-${section.id}">`;
+                    section.children.forEach(child => {
+                        html += `
+                            <div class="layer-item">
+                                <div class="layer-name">${child}</div>
+                                <div class="layer-type">Komponen</div>
+                            </div>
+                        `;
                     });
+                    html += `</div>`;
                 }
             });
+            body.innerHTML = html;
+        }
+
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+                showToast('success', 'Navigasi', `Berpindah ke bagian ${sectionId}`);
+            }
+        }
+
+        function highlightLayer(element) {
+            document.querySelectorAll('.layer-item').forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        function toggleLayerChildren(event, childrenId) {
+            event.stopPropagation();
+            const children = document.getElementById(childrenId);
+            const toggle = event.target;
+            if (children.style.display === 'none') {
+                children.style.display = 'block';
+                toggle.textContent = '▼';
+            } else {
+                children.style.display = 'none';
+                toggle.textContent = '▶';
+            }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+                const panel = document.getElementById('layerPanel');
+                if (panel.classList.contains('active')) toggleLayerPanel();
+            }
         });
 
-        // Tambahkan efek scroll pada navbar
-        let lastScroll = 0;
-        window.addEventListener('scroll', () => {
-            const nav = document.querySelector('nav');
-            const currentScroll = window.pageYOffset;
-
-            if (currentScroll > 100) {
-                nav.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.5)';
-            } else {
-                nav.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.3)';
-            }
-
-            lastScroll = currentScroll;
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                showToast('success', 'Selamat Datang!', 'Jelajahi portofolio saya dan jangan ragu untuk menyapa.');
+            }, 500);
         });
     </script>
 </body>
