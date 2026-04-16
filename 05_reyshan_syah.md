@@ -1,7 +1,3 @@
-Tentu, Reyshan. Saya akan menjabarkan seluruh isi papan tulis tersebut secara **rinci dan mendetail** untuk setiap bagiannya tanpa meringkas, sesuai dengan instruksi yang tertulis di papan tersebut menggunakan framework **PREP**.
-
-Berikut adalah penjelasan lengkapnya:
-
 ### **1. Point (Titik Utama)**
 Isi papan tulis tersebut adalah **Modul Pembelajaran DOM & JS Vanilla (Native)** yang disusun oleh **OS-Widya MD**. Fokus utamanya adalah membedah bagaimana JavaScript murni bekerja sebagai pengendali utama (*Logic*) untuk memanipulasi elemen-elemen di halaman web sehingga tercipta interaktivitas antara pengguna dan sistem.
 
