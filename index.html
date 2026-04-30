@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Booking Warnet</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+  <h1>🎮 Booking Warnet</h1>
+
+  <div class="form">
+    <input type="text" id="nama" placeholder="Nama">
+    <input type="text" id="nim" placeholder="NIM">
+    <input type="text" id="jurusan" placeholder="Jurusan">
+    <input type="time" id="jam">
+    <button onclick="booking()">Booking</button>
+  </div>
+
+  <h2>Daftar PC</h2>
+  <div id="pc-list"></div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
+
+body {
+  font-family: Arial;
+  background: #0f172a;
+  color: white;
+  text-align: center;
+}
+
+.container {
+  max-width: 800px;
+  margin: auto;
+}
+
+h1 {
+  margin-top: 20px;
+}
+
+.form input {
+  padding: 10px;
+  margin: 5px;
+  border-radius: 8px;
+  border: none;
+}
+
+button {
+  padding: 10px 20px;
+  background: #22c55e;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+}
+
+#pc-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.pc {
+  padding: 20px;
+  border-radius: 10px;
+  background: #1e293b;
+  cursor: pointer;
+}
+
+.available {
+  background: #16a34a;
+}
+
+.booked {
+  background: #dc2626;
+}
+
+let selectedPC = null;
+
+// load data
+let bookings = JSON.parse(localStorage.getItem("bookings")) || {};
+
+// render PC
+function renderPC() {
+  let container = document.getElementById("pc-list");
+  container.innerHTML = "";
+
+  for (let i = 1; i <= 12; i++) {
+    let pc = document.createElement("div");
+    pc.classList.add("pc");
+
+    if (bookings[i]) {
+      pc.classList.add("booked");
+      pc.innerHTML = `
+        PC ${i}<br>
+        ${bookings[i].nama}<br>
+        ${bookings[i].jam}
+      `;
+    } else {
+      pc.classList.add("available");
+      pc.innerHTML = `PC ${i}`;
+    }
+
+    pc.onclick = () => selectPC(i);
+    container.appendChild(pc);
+  }
+}
+
+function selectPC(pc) {
+  selectedPC = pc;
+  alert("Pilih PC " + pc);
+}
+
+function booking() {
+  let nama = document.getElementById("nama").value;
+  let nim = document.getElementById("nim").value;
+  let jurusan = document.getElementById("jurusan").value;
+  let jam = document.getElementById("jam").value;
+
+  if (!selectedPC) {
+    alert("Pilih PC dulu!");
+    return;
+  }
+
+  bookings[selectedPC] = { nama, nim, jurusan, jam };
+
+  localStorage.setItem("bookings", JSON.stringify(bookings));
+
+  renderPC();
+}
+
+renderPC();
