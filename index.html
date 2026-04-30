@@ -1,31 +1,10 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Booking Warnet</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
+<meta charset="UTF-8">
+<title>Warnet App Pro</title>
 
-<div class="container">
-  <h1>🎮 Booking Warnet</h1>
-
-  <div class="form">
-    <input type="text" id="nama" placeholder="Nama">
-    <input type="text" id="nim" placeholder="NIM">
-    <input type="text" id="jurusan" placeholder="Jurusan">
-    <input type="time" id="jam">
-    <button onclick="booking()">Booking</button>
-  </div>
-
-  <h2>Daftar PC</h2>
-  <div id="pc-list"></div>
-</div>
-
-<script src="script.js"></script>
-</body>
-</html>
-
+<style>
 body {
   font-family: Arial;
   background: #0f172a;
@@ -34,15 +13,11 @@ body {
 }
 
 .container {
-  max-width: 800px;
+  max-width: 900px;
   margin: auto;
 }
 
-h1 {
-  margin-top: 20px;
-}
-
-.form input {
+input, button {
   padding: 10px;
   margin: 5px;
   border-radius: 8px;
@@ -50,88 +25,209 @@ h1 {
 }
 
 button {
-  padding: 10px 20px;
   background: #22c55e;
-  border: none;
-  border-radius: 8px;
   color: white;
   cursor: pointer;
 }
 
-#pc-list {
+.hidden { display: none; }
+
+.grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
-  margin-top: 20px;
 }
 
 .pc {
   padding: 20px;
   border-radius: 10px;
-  background: #1e293b;
   cursor: pointer;
 }
 
-.available {
-  background: #16a34a;
-}
+.available { background: #16a34a; }
+.booked { background: #dc2626; }
+</style>
 
-.booked {
-  background: #dc2626;
-}
+</head>
+<body>
 
+<div class="container">
+
+<h1>🎮 Warnet App Pro</h1>
+
+<!-- LOGIN -->
+<div id="loginPage">
+  <h2>Login</h2>
+  <input id="username" placeholder="Username">
+  <input id="password" type="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="hidden">
+
+  <h2>Booking PC</h2>
+  <input id="nama" placeholder="Nama">
+  <input id="nim" placeholder="NIM">
+  <input id="jurusan" placeholder="Jurusan">
+  <input id="jam" type="time">
+  <button onclick="booking()">Booking</button>
+
+  <h3>Pilih PC</h3>
+  <div id="pcList" class="grid"></div>
+
+  <h3>QR Code</h3>
+  <img id="qr" width="200">
+
+  <h3>Pembayaran</h3>
+  <button onclick="bayar()">Bayar</button>
+  <p id="statusBayar"></p>
+
+  <hr>
+
+  <h2>Absensi Karyawan</h2>
+  <input id="namaKaryawan" placeholder="Nama Karyawan">
+  <button onclick="checkin()">Check-in</button>
+  <button onclick="checkout()">Check-out</button>
+
+  <ul id="absenList"></ul>
+
+</div>
+
+</div>
+
+<!-- QR Library -->
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+
+<script>
+let userLogin = null;
 let selectedPC = null;
 
-// load data
 let bookings = JSON.parse(localStorage.getItem("bookings")) || {};
+let absensi = JSON.parse(localStorage.getItem("absensi")) || [];
 
-// render PC
+// LOGIN (simple)
+function login() {
+  let u = document.getElementById("username").value;
+  let p = document.getElementById("password").value;
+
+  if (u === "admin" && p === "admin") {
+    userLogin = "admin";
+  } else {
+    userLogin = "user";
+  }
+
+  document.getElementById("loginPage").classList.add("hidden");
+  document.getElementById("dashboard").classList.remove("hidden");
+
+  renderPC();
+  renderAbsen();
+}
+
+// RENDER PC
 function renderPC() {
-  let container = document.getElementById("pc-list");
+  let container = document.getElementById("pcList");
   container.innerHTML = "";
 
   for (let i = 1; i <= 12; i++) {
-    let pc = document.createElement("div");
-    pc.classList.add("pc");
+    let div = document.createElement("div");
+    div.classList.add("pc");
 
     if (bookings[i]) {
-      pc.classList.add("booked");
-      pc.innerHTML = `
-        PC ${i}<br>
-        ${bookings[i].nama}<br>
-        ${bookings[i].jam}
-      `;
+      div.classList.add("booked");
+      div.innerHTML = `PC ${i}<br>${bookings[i].nama}`;
     } else {
-      pc.classList.add("available");
-      pc.innerHTML = `PC ${i}`;
+      div.classList.add("available");
+      div.innerHTML = `PC ${i}`;
     }
 
-    pc.onclick = () => selectPC(i);
-    container.appendChild(pc);
+    div.onclick = () => selectPC(i);
+    container.appendChild(div);
   }
 }
 
+// PILIH PC
 function selectPC(pc) {
   selectedPC = pc;
   alert("Pilih PC " + pc);
 }
 
+// BOOKING + QR
 function booking() {
   let nama = document.getElementById("nama").value;
   let nim = document.getElementById("nim").value;
   let jurusan = document.getElementById("jurusan").value;
   let jam = document.getElementById("jam").value;
 
-  if (!selectedPC) {
-    alert("Pilih PC dulu!");
-    return;
-  }
+  if (!selectedPC) return alert("Pilih PC dulu!");
 
-  bookings[selectedPC] = { nama, nim, jurusan, jam };
+  let dataQR = `Nama:${nama}|PC:${selectedPC}|Jam:${jam}`;
 
-  localStorage.setItem("bookings", JSON.stringify(bookings));
+  QRCode.toDataURL(dataQR, function (err, url) {
+    document.getElementById("qr").src = url;
 
-  renderPC();
+    bookings[selectedPC] = {
+      nama, nim, jurusan, jam,
+      status: "pending",
+      qr: url
+    };
+
+    localStorage.setItem("bookings", JSON.stringify(bookings));
+    renderPC();
+  });
 }
 
-renderPC();
+// PEMBAYARAN
+function bayar() {
+  if (!selectedPC || !bookings[selectedPC]) {
+    return alert("Belum booking!");
+  }
+
+  bookings[selectedPC].status = "paid";
+  localStorage.setItem("bookings", JSON.stringify(bookings));
+
+  document.getElementById("statusBayar").innerText = "✅ Sudah Dibayar";
+}
+
+// ABSENSI
+function checkin() {
+  let nama = document.getElementById("namaKaryawan").value;
+
+  absensi.push({
+    nama,
+    waktu: new Date().toLocaleString(),
+    status: "Masuk"
+  });
+
+  localStorage.setItem("absensi", JSON.stringify(absensi));
+  renderAbsen();
+}
+
+function checkout() {
+  let nama = document.getElementById("namaKaryawan").value;
+
+  absensi.push({
+    nama,
+    waktu: new Date().toLocaleString(),
+    status: "Keluar"
+  });
+
+  localStorage.setItem("absensi", JSON.stringify(absensi));
+  renderAbsen();
+}
+
+// RENDER ABSEN
+function renderAbsen() {
+  let list = document.getElementById("absenList");
+  list.innerHTML = "";
+
+  absensi.forEach(a => {
+    let li = document.createElement("li");
+    li.innerText = `${a.nama} - ${a.status} (${a.waktu})`;
+    list.appendChild(li);
+  });
+}
+</script>
+
+</body>
+</html>
