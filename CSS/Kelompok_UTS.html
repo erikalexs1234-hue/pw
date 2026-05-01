@@ -5,12 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bengkel Motor AbadiNanJaya - Service Motor Terpercaya</title>
     <style>
+        /* Reset CSS untuk menghilangkan margin dan padding default */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        /* Styling dasar untuk body */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
@@ -32,7 +34,7 @@
             background-color: #f97316;
         }
 
-        /* Header */
+        /* Header dengan posisi sticky agar tetap terlihat saat scroll */
         header {
             background-color: #2563eb;
             color: white;
@@ -43,18 +45,21 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
+        /* Container untuk membatasi lebar konten */
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 1rem;
         }
 
+        /* Navigasi dengan flexbox */
         nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
+        /* Logo bengkel */
         .logo {
             display: flex;
             align-items: center;
@@ -63,6 +68,7 @@
             font-weight: bold;
         }
 
+        /* Daftar link navigasi */
         .nav-links {
             display: flex;
             gap: 2rem;
@@ -76,10 +82,12 @@
             transition: color 0.3s;
         }
 
+        /* Efek hover pada link navigasi */
         .nav-links a:hover {
             color: #fb923c;
         }
 
+        /* Styling dasar untuk tombol */
         .btn {
             padding: 0.75rem 1.5rem;
             border: none;
@@ -89,6 +97,7 @@
             transition: all 0.3s;
         }
 
+        /* Tombol utama dengan warna aksen oranye */
         .btn-primary {
             background-color: #f97316;
             color: white;
@@ -98,6 +107,7 @@
             background-color: #ea580c;
         }
 
+        /* Tombol sekunder dengan warna abu-abu */
         .btn-secondary {
             background-color: #d1d5db;
             color: #1f2937;
@@ -107,7 +117,7 @@
             background-color: #9ca3af;
         }
 
-        /* Hero Section - Golden Ratio */
+        /* Hero Section dengan gradien biru - Golden Ratio */
         .hero {
             background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
             color: white;
@@ -128,12 +138,13 @@
             margin-right: auto;
         }
 
-        /* Services Section */
+        /* Section layanan */
         .services {
             padding: 5rem 0;
             background-color: #f1f5f9;
         }
 
+        /* Judul section */
         .section-title {
             text-align: center;
             font-size: 2.5rem;
@@ -141,7 +152,7 @@
             color: #1f2937;
         }
 
-        /* Table */
+        /* Container tabel dengan bayangan */
         .table-container {
             background: white;
             border-radius: 0.5rem;
@@ -151,11 +162,13 @@
             margin: 0 auto;
         }
 
+        /* Tabel daftar layanan */
         table {
             width: 100%;
             border-collapse: collapse;
         }
 
+        /* Header tabel dengan warna biru */
         thead {
             background-color: #2563eb;
             color: white;
@@ -166,26 +179,30 @@
             text-align: left;
         }
 
+        /* Warna latar belakang selang-seling untuk baris tabel */
         tbody tr:nth-child(even) {
             background-color: #f9fafb;
         }
 
+        /* Efek hover pada baris tabel */
         tbody tr:hover {
             background-color: #dbeafe;
         }
 
+        /* Harga dengan warna aksen oranye */
         .price {
             color: #f97316;
             font-weight: bold;
         }
 
-        /* Team Section */
+        /* Section tim */
         .team {
             padding: 5rem 0;
             background-color: #2563eb;
             color: white;
         }
 
+        /* Grid untuk kartu tim */
         .team-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -193,6 +210,7 @@
             margin-top: 3rem;
         }
 
+        /* Kartu anggota tim */
         .team-card {
             background: white;
             color: #1f2937;
@@ -203,18 +221,20 @@
             cursor: pointer;
         }
 
+        /* Efek hover pada kartu tim */
         .team-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px rgba(0,0,0,0.2);
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 20px 25px rgba(0,0,0,0.5);
         }
 
-        /* Golden Ratio - 1:1.618 */
+        /* Foto anggota tim dengan rasio Golden Ratio - 1:1.618 */
         .team-photo {
             width: 100%;
             aspect-ratio: 1/1.618;
             object-fit: cover;
         }
 
+        /* Informasi anggota tim */
         .team-info {
             padding: 1.5rem;
             text-align: center;
@@ -225,16 +245,18 @@
             margin-bottom: 0.5rem;
         }
 
+        /* Jabatan dengan warna aksen */
         .team-position {
             color: #f97316;
         }
 
-        /* Contact Section */
+        /* Section kontak */
         .contact {
             padding: 5rem 0;
             background-color: #f1f5f9;
         }
 
+        /* Grid untuk layout kontak */
         .contact-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -242,22 +264,26 @@
             margin-top: 3rem;
         }
 
+        /* Informasi kontak */
         .contact-info {
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
         }
 
+        /* Item kontak individual */
         .contact-item {
             display: flex;
             gap: 1rem;
         }
 
+        /* Ikon pada item kontak */
         .contact-item svg {
             flex-shrink: 0;
             color: #2563eb;
         }
 
+        /* Form kontak */
         .contact-form {
             background: white;
             padding: 2rem;
@@ -265,6 +291,7 @@
             box-shadow: 0 10px 15px rgba(0,0,0,0.1);
         }
 
+        /* Grup input form */
         .form-group {
             margin-bottom: 1rem;
         }
@@ -276,6 +303,7 @@
             font-weight: 500;
         }
 
+        /* Input, select, dan textarea dalam form */
         .form-group input,
         .form-group select,
         .form-group textarea {
@@ -286,6 +314,7 @@
             font-size: 1rem;
         }
 
+        /* Efek fokus pada input form */
         .form-group input:focus,
         .form-group select:focus,
         .form-group textarea:focus {
@@ -294,6 +323,7 @@
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
+        /* Tanda wajib isi berwarna merah */
         .required {
             color: #ef4444;
         }
@@ -306,12 +336,13 @@
             text-align: center;
         }
 
+        /* Subtitle footer dengan warna abu-abu */
         .footer-subtitle {
             color: #9ca3af;
             margin-top: 0.5rem;
         }
 
-        /* Modal */
+        /* Modal (popup) */
         .modal {
             display: none;
             position: fixed;
@@ -325,12 +356,14 @@
             overflow-y: auto;
         }
 
+        /* Modal saat aktif/ditampilkan */
         .modal.active {
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
+        /* Konten modal */
         .modal-content {
             background: white;
             border-radius: 0.5rem;
@@ -341,6 +374,7 @@
             box-shadow: 0 20px 25px rgba(0,0,0,0.2);
         }
 
+        /* Header modal dengan warna aksen */
         .modal-header {
             background-color: #f97316;
             color: white;
@@ -358,6 +392,7 @@
             gap: 0.75rem;
         }
 
+        /* Tombol tutup modal */
         .close-btn {
             background: none;
             border: none;
@@ -372,21 +407,24 @@
             background-color: rgba(255,255,255,0.1);
         }
 
+        /* Body modal */
         .modal-body {
             padding: 2rem;
         }
 
+        /* Footer modal dengan tombol */
         .modal-footer {
             display: flex;
             gap: 1rem;
             padding-top: 1rem;
         }
 
+        /* Tombol pada footer modal memenuhi lebar */
         .modal-footer .btn {
             flex: 1;
         }
 
-        /* Toast Notification */
+        /* Kontainer notifikasi toast */
         .toast-container {
             position: fixed;
             top: 1rem;
@@ -394,6 +432,7 @@
             z-index: 2000;
         }
 
+        /* Notifikasi toast */
         .toast {
             background: white;
             padding: 1rem 1.5rem;
@@ -407,6 +446,7 @@
             animation: slideIn 0.3s ease-out;
         }
 
+        /* Animasi toast masuk dari kanan */
         @keyframes slideIn {
             from {
                 transform: translateX(400px);
@@ -418,36 +458,44 @@
             }
         }
 
+        /* Toast sukses dengan border hijau */
         .toast.success {
             border-left: 4px solid #10b981;
         }
 
+        /* Toast error dengan border merah */
         .toast.error {
             border-left: 4px solid #ef4444;
         }
 
+        /* Toast info dengan border biru */
         .toast.info {
             border-left: 4px solid #3b82f6;
         }
 
-        /* Responsive */
+        /* Responsif untuk layar kecil (tablet & HP) */
         @media (max-width: 768px) {
+            /* Sembunyikan navigasi pada layar kecil */
             .nav-links {
                 display: none;
             }
 
+            /* Perkecil ukuran judul hero */
             .hero h1 {
                 font-size: 2rem;
             }
 
+            /* Perkecil ukuran judul section */
             .section-title {
                 font-size: 2rem;
             }
 
+            /* Perkecil font tabel */
             table {
                 font-size: 0.875rem;
             }
 
+            /* Kurangi padding sel tabel */
             th, td {
                 padding: 0.75rem;
             }
@@ -455,31 +503,34 @@
     </style>
 </head>
 <body>
-    <!-- Toast Container -->
+    <!-- Toast Container untuk menampung notifikasi -->
     <div class="toast-container" id="toastContainer"></div>
 
-    <!-- Header -->
+    <!-- Header dengan navigasi -->
     <header>
         <div class="container">
             <nav>
+                <!-- Logo bengkel dengan ikon SVG -->
                 <div class="logo">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
                     </svg>
                     <span>Bengkel Motor Abadi Nan Jaya</span>
                 </div>
+                <!-- Link navigasi -->
                 <ul class="nav-links">
                     <li><a href="#home">Beranda</a></li>
                     <li><a href="#services">Layanan</a></li>
                     <li><a href="#team">Tim Kami</a></li>
                     <li><a href="#contact">Kontak</a></li>
+                    <!-- Tombol booking yang membuka modal -->
                     <li><button class="btn btn-primary" onclick="openModal()">Booking Sekarang</button></li>
                 </ul>
             </nav>
         </div>
     </header>
 
-    <!-- Hero Section -->
+    <!-- Hero Section - bagian pembuka halaman -->
     <section id="home" class="hero">
         <div class="container">
             <h1>Bengkel Motor Terpercaya</h1>
@@ -488,11 +539,12 @@
         </div>
     </section>
 
-    <!-- Services Section -->
+    <!-- Services Section - daftar layanan dan harga -->
     <section id="services" class="services">
         <div class="container">
             <h2 class="section-title">Daftar Layanan & Harga</h2>
             <div class="table-container">
+                <!-- Tabel daftar layanan -->
                 <table>
                     <thead>
                         <tr>
@@ -557,37 +609,41 @@
         </div>
     </section>
 
-    <!-- Team Section -->
+    <!-- Team Section - menampilkan anggota tim development -->
     <section id="team" class="team">
         <div class="container">
             <h2 class="section-title" style="color: white;">Tim Development Kami</h2>
             <p style="text-align: center; font-size: 1.25rem;">Teknisi berpengalaman siap melayani Anda</p>
             
             <div class="team-grid">
+                <!-- Kartu anggota tim: Erik Tri Argianto -->
                 <div class="team-card" onclick="showToast('Erik Tri Argianto - Kepala Development', 'success')">
                     <img src="https://images.unsplash.com/photo-1649768870222-17848797d6b4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400" alt="Erik Tri Argianto" class="team-photo">
                     <div class="team-info">
                         <h3 class="team-name">Erik Tri Argianto</h3>
-                        <p class="team-position">Kepala Developmen</p>
+                        <p class="team-position">CEO</p>
                     </div>
                 </div>
 
+                <!-- Kartu anggota tim: Reyshan Syah -->
                 <div class="team-card" onclick="showToast('Reyshan Syah - Anggota Development', 'success')">
-                    <img src="https://i.ibb.co.com/Wv7dstTd/reyshan-jpg.jpg" alt="Reyshan Syah" class="team-photo">
+                    <img src="https://i.ibb.co.com/Wv7dstTd/reyshan.jpg" alt="Reyshan Syah" class="team-photo">
                     <div class="team-info">
                         <h3 class="team-name">Reyshan Syah</h3>
-                        <p class="team-position">Anggota Development</p>
+                        <p class="team-position">CFO</p>
                     </div>
                 </div>
 
+                <!-- Kartu anggota tim: Ahmad Sopandi -->
                 <div class="team-card" onclick="showToast('Ahmad Sopandi - Anggota Development', 'success')">
-                    <img src="https://images.unsplash.com/photo-1661745805760-a27e3405b47b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400" alt="Ahmad Sopandi" class="team-photo">
+                    <img src="https://ibb.co.com/zDXcCRf" alt="Ahmad Sopandi" class="team-photo">
                     <div class="team-info">
                         <h3 class="team-name">Ahmad Sopandi</h3>
-                        <p class="team-position">Anggota Development</p>
+                        <p class="team-position">COO</p>
                     </div>
                 </div>
 
+                <!-- Kartu anggota tim: Fajar Hidayahtullah Muliawan -->
                 <div class="team-card" onclick="showToast('Fajar Hidayahtullah Muliawan - Anggota Development', 'success')">
                     <img src="https://images.unsplash.com/photo-1527907440866-d9ccd3e05491?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400" alt="Fajar Hidayahtullah Muliawan" class="team-photo">
                     <div class="team-info">
@@ -596,14 +652,16 @@
                     </div>
                 </div>
 
+                <!-- Kartu anggota tim: Dani Eka -->
                 <div class="team-card" onclick="showToast('Dani Eka - Anggota Development', 'success')">
-                    <img src="https://images.unsplash.com/photo-1567695213344-47a2a2e2683f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400" alt="Dani Eka" class="team-photo">
+                    <img src="https://ibb.co.com/PZNBqPKQ" alt="Dani Eka" class="team-photo">
                     <div class="team-info">
                         <h3 class="team-name">Dani Eka</h3>
                         <p class="team-position">Anggota Development</p>
                     </div>
                 </div>
 
+                <!-- Kartu anggota tim: Shaula Oceano Satria Muliawan -->
                 <div class="team-card" onclick="showToast('Shaula Oceano Satria Muliawan - Anggota Development', 'success')">
                     <img src="https://images.unsplash.com/photo-1760637626191-fa20283f6fbe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400" alt="Shaula Oceano Satria Muliawan" class="team-photo">
                     <div class="team-info">
@@ -612,6 +670,7 @@
                     </div>
                 </div>
                 
+                <!-- Kartu anggota tim: Muhammad Ismail -->
                 <div class="team-card" onclick="showToast('Muhammad Ismail - Anggota Development', 'success')">
                     <img src="https://images.unsplash.com/photo-1760637626191-fa20283f6fbe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400" alt="Shaula Oceano Satria Muliawan" class="team-photo">
                     <div class="team-info">
@@ -622,12 +681,14 @@
         </div>
     </section>
 
-    <!-- Contact Section -->
+    <!-- Contact Section - informasi kontak dan form pesan -->
     <section id="contact" class="contact">
         <div class="container">
             <h2 class="section-title">Hubungi Kami</h2>
             <div class="contact-grid">
+                <!-- Informasi kontak: alamat, telepon, email, jam operasional -->
                 <div class="contact-info">
+                    <!-- Alamat -->
                     <div class="contact-item">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
@@ -635,10 +696,11 @@
                         </svg>
                         <div>
                             <h3>Alamat</h3>
-                            <p>Jl. Raya Motor No. 123, Jakarta Selatan</p>
+                            <p> Jl. Letda Natsir No.7 Cikeas Nagrak. Kec. Gunung Putri. Kab. Bogor</p>
                         </div>
                     </div>
 
+                    <!-- Telepon -->
                     <div class="contact-item">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
@@ -649,6 +711,7 @@
                         </div>
                     </div>
 
+                    <!-- Email -->
                     <div class="contact-item">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
@@ -656,10 +719,11 @@
                         </svg>
                         <div>
                             <h3>Email</h3>
-                            <p>info@bengkelmotorpro.com</p>
+                            <p>bengkelmotorabadinanjaya@gmail.com</p>
                         </div>
                     </div>
 
+                    <!-- Jam Operasional -->
                     <div class="contact-item">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="10"/>
@@ -667,12 +731,13 @@
                         </svg>
                         <div>
                             <h3>Jam Operasional</h3>
-                            <p>Senin - Sabtu: 08.00 - 18.00</p>
-                            <p>Minggu: 08.00 - 14.00</p>
+                            <p>Senin - Sabtu: 08.00 - 20.00</p>
+                            <p>Minggu: 08.00 - 17.00</p>
                         </div>
                     </div>
                 </div>
 
+                <!-- Form kirim pesan -->
                 <div class="contact-form">
                     <h3 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Kirim Pesan</h3>
                     <form onsubmit="handleContactSubmit(event)">
@@ -700,9 +765,10 @@
         </div>
     </footer>
 
-    <!-- Modal Booking -->
+    <!-- Modal Booking - popup form booking service -->
     <div id="bookingModal" class="modal">
         <div class="modal-content">
+            <!-- Header modal dengan ikon kalender -->
             <div class="modal-header">
                 <h2>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -713,25 +779,31 @@
                     </svg>
                     Form Booking Service
                 </h2>
+                <!-- Tombol tutup modal -->
                 <button class="close-btn" onclick="closeModal()">&times;</button>
             </div>
+            <!-- Body modal berisi form booking -->
             <div class="modal-body">
                 <form id="bookingForm" onsubmit="handleBookingSubmit(event)">
+                    <!-- Input nama -->
                     <div class="form-group">
                         <label>Nama Lengkap <span class="required">*</span></label>
                         <input type="text" id="name" placeholder="Masukkan nama lengkap" required>
                     </div>
 
+                    <!-- Input nomor telepon -->
                     <div class="form-group">
                         <label>Nomor Telepon <span class="required">*</span></label>
                         <input type="tel" id="phone" placeholder="Contoh: 081234567890" required>
                     </div>
 
+                    <!-- Input merk & tipe motor -->
                     <div class="form-group">
                         <label>Merk & Tipe Motor</label>
                         <input type="text" id="motorcycle" placeholder="Contoh: Honda Beat 2020">
                     </div>
 
+                    <!-- Dropdown pilihan layanan -->
                     <div class="form-group">
                         <label>Jenis Layanan <span class="required">*</span></label>
                         <select id="service" required>
@@ -747,16 +819,19 @@
                         </select>
                     </div>
 
+                    <!-- Input tanggal & waktu booking -->
                     <div class="form-group">
                         <label>Tanggal & Waktu <span class="required">*</span></label>
                         <input type="datetime-local" id="date" required>
                     </div>
 
+                    <!-- Textarea catatan tambahan -->
                     <div class="form-group">
                         <label>Catatan Tambahan</label>
                         <textarea id="notes" placeholder="Keluhan atau permintaan khusus..." rows="4"></textarea>
                     </div>
 
+                    <!-- Tombol batal dan konfirmasi -->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" onclick="closeModal()">Batal</button>
                         <button type="submit" class="btn btn-primary">Konfirmasi Booking</button>
@@ -767,17 +842,18 @@
     </div>
 
     <script>
-        // Modal Functions
+        // Fungsi untuk membuka modal booking
         function openModal() {
             document.getElementById('bookingModal').classList.add('active');
             showToast('Silakan isi form booking', 'info');
         }
 
+        // Fungsi untuk menutup modal booking
         function closeModal() {
             document.getElementById('bookingModal').classList.remove('active');
         }
 
-        // Close modal when clicking outside
+        // Menutup modal ketika pengguna mengklik di luar area modal
         window.onclick = function(event) {
             const modal = document.getElementById('bookingModal');
             if (event.target === modal) {
@@ -785,12 +861,13 @@
             }
         }
 
-        // Toast Notification Function
+        // Fungsi untuk menampilkan notifikasi toast
         function showToast(message, type = 'info') {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
             
+            // Menentukan ikon berdasarkan tipe notifikasi
             let icon = '✓';
             if (type === 'error') icon = '✕';
             if (type === 'info') icon = 'ℹ';
@@ -802,39 +879,45 @@
             
             container.appendChild(toast);
             
+            // Menghapus toast setelah 3 detik dengan animasi keluar
             setTimeout(() => {
                 toast.style.animation = 'slideIn 0.3s ease-out reverse';
                 setTimeout(() => toast.remove(), 300);
             }, 3000);
         }
 
-        // Form Submissions
+        // Fungsi untuk menangani submit form booking
         function handleBookingSubmit(event) {
             event.preventDefault();
             
+            // Mengambil nilai dari input form
             const name = document.getElementById('name').value;
             const phone = document.getElementById('phone').value;
             const service = document.getElementById('service').value;
             const date = document.getElementById('date').value;
             
+            // Validasi field wajib diisi
             if (!name || !phone || !service || !date) {
                 showToast('Mohon lengkapi semua field yang wajib diisi!', 'error');
                 return;
             }
             
+            // Menampilkan notifikasi sukses
             showToast('Booking berhasil! Kami akan menghubungi Anda segera.', 'success');
             
+            // Reset form dan tutup modal
             document.getElementById('bookingForm').reset();
             closeModal();
         }
 
+        // Fungsi untuk menangani submit form kontak
         function handleContactSubmit(event) {
             event.preventDefault();
             showToast('Pesan berhasil dikirim!', 'success');
             event.target.reset();
         }
 
-        // Smooth Scrolling
+        // Smooth Scrolling - efek scroll halus saat mengklik link navigasi
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
