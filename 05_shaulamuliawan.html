@@ -2,197 +2,231 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>WarnetKu Dashboard</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<title>Warnet App Pro</title>
 
 <style>
-:root{
-  --bg:#f8fafc; --card:#fff; --text:#0f172a; --muted:#64748b;
-  --primary:#6366f1; --primary2:#4f46e5;
-  --danger:#ef4444; --warn:#f59e0b; --border:#e2e8f0;
-}
-body.dark{
-  --bg:#0b1220; --card:#0f172a; --text:#e5e7eb; --muted:#94a3b8;
-  --primary:#818cf8; --primary2:#6366f1;
-  --danger:#f87171; --warn:#fbbf24; --border:#1f2937;
-}
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
-body{background:var(--bg);color:var(--text)}
-
-.container{max-width:1000px;margin:auto;padding:20px}
-.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
-
-.logo-wrap{display:flex;align-items:center;gap:10px}
-.logo{width:45px;height:45px;border-radius:10px;box-shadow:0 3px 10px rgba(0,0,0,0.2)}
-
-.btn{padding:10px;border:none;border-radius:8px;cursor:pointer;background:var(--primary);color:#fff;font-weight:600}
-.btn:hover{background:var(--primary2)}
-.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text)}
-.btn-danger{background:var(--danger)}
-.btn-warn{background:var(--warn)}
-
-.card{background:var(--card);padding:15px;border-radius:12px;border:1px solid var(--border);margin-bottom:15px}
-.grid{display:grid;gap:10px}
-.list{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:15px}
-
-input,select{
-  padding:12px;border-radius:8px;border:1px solid var(--border);
-  background:transparent;color:var(--text)
+body {
+  font-family: Arial;
+  background: #0f172a;
+  color: white;
+  text-align: center;
 }
 
-.meta{font-size:13px;color:var(--muted)}
-.actions{margin-top:10px;display:flex;gap:5px}
+.container {
+  max-width: 900px;
+  margin: auto;
+}
 
-.center{min-height:100vh;display:flex;justify-content:center;align-items:center}
-.login{width:320px}
+input, button {
+  padding: 10px;
+  margin: 5px;
+  border-radius: 8px;
+  border: none;
+}
+
+button {
+  background: #22c55e;
+  color: white;
+  cursor: pointer;
+}
+
+.hidden { display: none; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.pc {
+  padding: 20px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.available { background: #16a34a; }
+.booked { background: #dc2626; }
 </style>
-</head>
 
+</head>
 <body>
 
+<div class="container">
+
+<h1>🎮 Warnet App Pro</h1>
+
 <!-- LOGIN -->
-<div id="loginPage" class="center">
-  <div class="card login">
-    <h2>Login Admin</h2>
-    <div class="grid">
-      <input type="text" id="username" placeholder="Username">
-      <input type="password" id="password" placeholder="Password">
-      <button class="btn" onclick="login()">Login</button>
-    </div>
-  </div>
+<div id="loginPage">
+  <h2>Login</h2>
+  <input id="username" placeholder="Username">
+  <input id="password" type="password" placeholder="Password">
+  <button onclick="login()">Login</button>
 </div>
 
-<!-- APP -->
-<div id="app" style="display:none">
-  <div class="container">
+<!-- DASHBOARD -->
+<div id="dashboard" class="hidden">
 
-    <div class="topbar">
-      <div class="logo-wrap">
-        <!-- ✅ LOGO BASE64 (SUDAH DIGABUNG) -->
-        <img class="logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..." />
-        <h1>WarnetKu Dashboard</h1>
-      </div>
+  <h2>Booking PC</h2>
+  <input id="nama" placeholder="Nama">
+  <input id="nim" placeholder="NIM">
+  <input id="jurusan" placeholder="Jurusan">
+  <input id="jam" type="time">
+  <button onclick="booking()">Booking</button>
 
-      <div style="display:flex;gap:8px">
-        <button class="btn-ghost btn" onclick="toggleDark()">🌙</button>
-        <button class="btn-ghost btn" onclick="logout()">Logout</button>
-      </div>
-    </div>
+  <h3>Pilih PC</h3>
+  <div id="pcList" class="grid"></div>
 
-    <input type="text" id="search" class="card" placeholder="Cari nama / NIM...">
+  <h3>QR Code</h3>
+  <img id="qr" width="200">
 
-    <div class="card">
-      <h3>Tambah / Edit</h3>
-      <div class="grid">
-        <input type="text" id="nim" placeholder="NIM">
-        <input type="text" id="nama" placeholder="Nama">
-        <input type="number" id="umur" placeholder="Umur">
-        <select id="jurusan">
-          <option value="">Pilih Jurusan</option>
-          <option>Informatika</option>
-          <option>Sistem Informasi</option>
-          <option>Manajemen</option>
-          <option>Akuntansi</option>
-        </select>
-        <button id="submitBtn" class="btn">Tambah</button>
-      </div>
-    </div>
+  <h3>Pembayaran</h3>
+  <button onclick="bayar()">Bayar</button>
+  <p id="statusBayar"></p>
 
-    <div id="userList" class="list"></div>
-  </div>
+  <hr>
+
+  <h2>Absensi Karyawan</h2>
+  <input id="namaKaryawan" placeholder="Nama Karyawan">
+  <button onclick="checkin()">Check-in</button>
+  <button onclick="checkout()">Check-out</button>
+
+  <ul id="absenList"></ul>
+
 </div>
+
+</div>
+
+<!-- QR Library -->
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 
 <script>
-// LOGIN
-const ADMIN={user:"admin",pass:"123"};
-const login=()=>{
-  if(username.value===ADMIN.user && password.value===ADMIN.pass){
-    localStorage.setItem("login","true");init();
-  }else alert("Login gagal!");
-};
-const logout=()=>{localStorage.removeItem("login");init();};
+let userLogin = null;
+let selectedPC = null;
 
-// DARK MODE
-const toggleDark=()=>{
-  const d=localStorage.getItem("dark")==="true";
-  localStorage.setItem("dark",(!d));applyTheme();
-};
-const applyTheme=()=>document.body.classList.toggle("dark",localStorage.getItem("dark")==="true");
+let bookings = JSON.parse(localStorage.getItem("bookings")) || {};
+let absensi = JSON.parse(localStorage.getItem("absensi")) || [];
 
-// DATA
-let users=JSON.parse(localStorage.getItem("data"))||[];
-let editId=null;
-const save=()=>localStorage.setItem("data",JSON.stringify(users));
+// LOGIN (simple)
+function login() {
+  let u = document.getElementById("username").value;
+  let p = document.getElementById("password").value;
 
-// CRUD
-const saveUser=()=>{
-  const nim=nimInput.value,nama=namaInput.value,umur=umurInput.value,jurusan=jurusanInput.value;
-  if(!nim||!nama||!umur||!jurusan)return alert("Lengkapi!");
-
-  if(editId){
-    users=users.map(u=>u.id===editId?{...u,nim,nama,umur,jurusan}:u);
-    editId=null;submitBtn.innerText="Tambah";
-  }else{
-    users.push({id:Date.now()+"",nim,nama,umur,jurusan});
+  if (u === "admin" && p === "admin") {
+    userLogin = "admin";
+  } else {
+    userLogin = "user";
   }
-  save();clear();render();
-};
 
-const deleteUser=id=>{users=users.filter(u=>u.id!==id);save();render();};
+  document.getElementById("loginPage").classList.add("hidden");
+  document.getElementById("dashboard").classList.remove("hidden");
 
-const editUser=id=>{
-  const u=users.find(x=>x.id===id);
-  nimInput.value=u.nim;
-  namaInput.value=u.nama;
-  umurInput.value=u.umur;
-  jurusanInput.value=u.jurusan;
-  editId=id;
-  submitBtn.innerText="Update";
-};
+  renderPC();
+  renderAbsen();
+}
 
-// RENDER
-const render=(data=users)=>{
-  userList.innerHTML=data.length?data.map(u=>`
-  <div class="card">
-    <h3>${u.nama}</h3>
-    <div class="meta">NIM: ${u.nim}</div>
-    <div class="meta">Umur: ${u.umur}</div>
-    <div class="meta">Jurusan: ${u.jurusan}</div>
-    <div class="actions">
-      <button class="btn-warn btn" onclick="editUser('${u.id}')">Edit</button>
-      <button class="btn-danger btn" onclick="deleteUser('${u.id}')">Hapus</button>
-    </div>
-  </div>`).join(""):"<p>Tidak ada data</p>";
-};
+// RENDER PC
+function renderPC() {
+  let container = document.getElementById("pcList");
+  container.innerHTML = "";
 
-// SEARCH
-search.oninput=e=>{
-  const k=e.target.value.toLowerCase();
-  render(users.filter(u=>u.nama.toLowerCase().includes(k)||u.nim.includes(k)));
-};
+  for (let i = 1; i <= 12; i++) {
+    let div = document.createElement("div");
+    div.classList.add("pc");
 
-// UTILS
-const clear=()=>{nimInput.value="";namaInput.value="";umurInput.value="";jurusanInput.value="";};
+    if (bookings[i]) {
+      div.classList.add("booked");
+      div.innerHTML = `PC ${i}<br>${bookings[i].nama}`;
+    } else {
+      div.classList.add("available");
+      div.innerHTML = `PC ${i}`;
+    }
 
-// INIT
-const init=()=>{
-  applyTheme();
-  if(localStorage.getItem("login")==="true"){
-    loginPage.style.display="none";app.style.display="block";render();
-  }else{
-    loginPage.style.display="flex";app.style.display="none";
+    div.onclick = () => selectPC(i);
+    container.appendChild(div);
   }
-};
+}
 
-const nimInput=document.getElementById("nim");
-const namaInput=document.getElementById("nama");
-const umurInput=document.getElementById("umur");
-const jurusanInput=document.getElementById("jurusan");
-const submitBtn=document.getElementById("submitBtn");
+// PILIH PC
+function selectPC(pc) {
+  selectedPC = pc;
+  alert("Pilih PC " + pc);
+}
 
-submitBtn.onclick=saveUser;
-init();
+// BOOKING + QR
+function booking() {
+  let nama = document.getElementById("nama").value;
+  let nim = document.getElementById("nim").value;
+  let jurusan = document.getElementById("jurusan").value;
+  let jam = document.getElementById("jam").value;
+
+  if (!selectedPC) return alert("Pilih PC dulu!");
+
+  let dataQR = `Nama:${nama}|PC:${selectedPC}|Jam:${jam}`;
+
+  QRCode.toDataURL(dataQR, function (err, url) {
+    document.getElementById("qr").src = url;
+
+    bookings[selectedPC] = {
+      nama, nim, jurusan, jam,
+      status: "pending",
+      qr: url
+    };
+
+    localStorage.setItem("bookings", JSON.stringify(bookings));
+    renderPC();
+  });
+}
+
+// PEMBAYARAN
+function bayar() {
+  if (!selectedPC || !bookings[selectedPC]) {
+    return alert("Belum booking!");
+  }
+
+  bookings[selectedPC].status = "paid";
+  localStorage.setItem("bookings", JSON.stringify(bookings));
+
+  document.getElementById("statusBayar").innerText = "✅ Sudah Dibayar";
+}
+
+// ABSENSI
+function checkin() {
+  let nama = document.getElementById("namaKaryawan").value;
+
+  absensi.push({
+    nama,
+    waktu: new Date().toLocaleString(),
+    status: "Masuk"
+  });
+
+  localStorage.setItem("absensi", JSON.stringify(absensi));
+  renderAbsen();
+}
+
+function checkout() {
+  let nama = document.getElementById("namaKaryawan").value;
+
+  absensi.push({
+    nama,
+    waktu: new Date().toLocaleString(),
+    status: "Keluar"
+  });
+
+  localStorage.setItem("absensi", JSON.stringify(absensi));
+  renderAbsen();
+}
+
+// RENDER ABSEN
+function renderAbsen() {
+  let list = document.getElementById("absenList");
+  list.innerHTML = "";
+
+  absensi.forEach(a => {
+    let li = document.createElement("li");
+    li.innerText = `${a.nama} - ${a.status} (${a.waktu})`;
+    list.appendChild(li);
+  });
+}
 </script>
 
 </body>
