@@ -8,80 +8,41 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
 <style>
-* { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
-body { background:#020617; color:white; }
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#020617;color:white;}
 
-/* LOGIN */
-#loginPage { height:100vh; display:flex; justify-content:center; align-items:center; }
-.login-box {
-  background:rgba(255,255,255,0.05);
-  padding:30px;
-  border-radius:15px;
-  width:300px;
-}
-input { width:100%; padding:10px; margin:8px 0; border:none; border-radius:8px; }
+#loginPage{height:100vh;display:flex;justify-content:center;align-items:center;}
+.login-box{background:rgba(255,255,255,0.05);padding:30px;border-radius:15px;width:300px;}
 
-.btn {
-  padding:10px; border:none; border-radius:8px;
-  width:100%; cursor:pointer;
-}
+input{width:100%;padding:10px;margin:8px 0;border:none;border-radius:8px;}
+
+.btn{padding:10px;border:none;border-radius:8px;width:100%;cursor:pointer;}
 .blue{background:#0ea5e9;}
 .green{background:#22c55e;}
-.red{background:#ef4444;}
 
 #app{display:none;}
 
-/* SIDEBAR */
-.sidebar {
-  width:220px; height:100vh;
-  background:#0f172a; position:fixed; padding:20px;
-}
-.logo { display:flex; align-items:center; gap:10px; margin-bottom:30px; }
-.logo img { width:50px; filter:drop-shadow(0 0 10px cyan); }
+.sidebar{width:220px;height:100vh;background:#0f172a;position:fixed;padding:20px;}
+.logo{display:flex;align-items:center;gap:10px;margin-bottom:30px;}
+.logo img{width:50px;}
 
-.menu div {
-  padding:10px; border-radius:8px; cursor:pointer;
-}
-.menu div:hover { background:rgba(255,255,255,0.1); }
+.menu div{padding:10px;cursor:pointer;border-radius:8px;}
+.menu div:hover{background:rgba(255,255,255,0.1);}
 
-/* CONTENT */
-.content { margin-left:240px; padding:20px; }
+.content{margin-left:240px;padding:20px;}
 
-.card {
-  background:rgba(255,255,255,0.05);
-  padding:20px;
-  border-radius:15px;
-  margin-bottom:20px;
-}
+.card{background:rgba(255,255,255,0.05);padding:20px;border-radius:15px;}
 
-/* PC GRID */
-.pc-grid {
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:10px;
-}
-.pc {
-  padding:15px;
-  text-align:center;
-  border-radius:10px;
-  cursor:pointer;
-  transition:0.2s;
-}
-.pc:hover { transform:scale(1.05); }
-
-.available { background:#16a34a; }
-.booked { background:#dc2626; }
-.selected { outline:3px solid cyan; }
-
-/* ANIMASI */
-.fade { animation:fade 0.5s; }
-@keyframes fade { from{opacity:0;} to{opacity:1;} }
+.pc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px;}
+.pc{padding:15px;text-align:center;border-radius:10px;cursor:pointer;}
+.available{background:#16a34a;}
+.booked{background:#dc2626;}
+.selected{outline:3px solid cyan;}
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
 <div id="loginPage">
   <div class="login-box">
     <h2>Login</h2>
@@ -91,7 +52,6 @@ input { width:100%; padding:10px; margin:8px 0; border:none; border-radius:8px; 
   </div>
 </div>
 
-<!-- APP -->
 <div id="app">
 
 <div class="sidebar">
@@ -99,36 +59,31 @@ input { width:100%; padding:10px; margin:8px 0; border:none; border-radius:8px; 
     <img src="logo.png">
     <b>WarnetKu</b>
   </div>
-
-  <div class="menu">
-    <div onclick="showPage('booking')">Booking</div>
-    <div onclick="logout()">Logout</div>
-  </div>
 </div>
 
 <div class="content">
+<div class="card">
 
-<div id="bookingPage" class="card fade">
-  <h3>Booking PC</h3>
+<h3>Booking PC</h3>
 
-  <input id="nama" placeholder="Nama">
-  <input id="nim" placeholder="NIM">
-  <input id="jurusan" placeholder="Jurusan">
+<input id="nama" placeholder="Nama">
+<input id="durasi" type="number" placeholder="Durasi (jam)">
+<p>Harga / jam: Rp 5.000</p>
+<p id="totalHarga">Total: Rp 0</p>
 
-  <div class="pc-grid" id="pcList"></div>
+<div class="pc-grid" id="pcList"></div>
 
-  <button class="btn blue" onclick="booking()">Booking</button>
-
-  <h4>QR</h4>
-  <img id="qr">
-</div>
+<button class="btn blue" onclick="booking()">Booking</button>
 
 </div>
+</div>
+
 </div>
 
 <script>
-let selectedPC = null;
-let bookings = JSON.parse(localStorage.getItem("bookings")) || {};
+let selectedPC=null;
+let bookings=JSON.parse(localStorage.getItem("bookings"))||{};
+const hargaPerJam=5000;
 
 /* LOGIN */
 function login(){
@@ -136,9 +91,10 @@ function login(){
   app.style.display="block";
 }
 
-/* LOGOUT */
-function logout(){
-  location.reload();
+/* HITUNG HARGA */
+durasi.oninput=()=>{
+  let d=durasi.value||0;
+  totalHarga.innerText="Total: Rp "+(d*hargaPerJam);
 }
 
 /* RENDER PC */
@@ -146,10 +102,12 @@ function renderPC(){
   pcList.innerHTML="";
   for(let i=1;i<=12;i++){
     let div=document.createElement("div");
-    div.className="pc "+(bookings[i]?"booked":"available");
+    let data=bookings[i];
 
-    if(bookings[i]){
-      div.innerHTML="PC "+i+"<br>"+bookings[i];
+    div.className="pc "+(data?"booked":"available");
+
+    if(data){
+      div.innerHTML=`PC ${i}<br>${data.nama}<br>${data.sisa}s`;
     }else{
       div.innerHTML="PC "+i;
     }
@@ -159,35 +117,60 @@ function renderPC(){
       renderPC();
     }
 
-    if(selectedPC===i){
-      div.classList.add("selected");
-    }
+    if(selectedPC===i) div.classList.add("selected");
 
     pcList.appendChild(div);
   }
 }
 
-/* BOOKING + RESET */
+/* BOOKING + TIMER */
 function booking(){
-  let namaVal = nama.value;
-  let nimVal = nim.value;
-  let jurusanVal = jurusan.value;
+  let namaVal=nama.value;
+  let durasiVal=parseInt(durasi.value);
 
   if(!selectedPC) return alert("Pilih PC!");
+  if(!durasiVal) return alert("Isi durasi!");
 
-  bookings[selectedPC]=namaVal;
-  localStorage.setItem("bookings",JSON.stringify(bookings));
+  let totalDetik=durasiVal*60; // demo: 1 jam = 60 detik
 
-  // QR
-  qr.src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data="+namaVal;
+  bookings[selectedPC]={
+    nama:namaVal,
+    sisa:totalDetik
+  };
 
-  // 🔥 RESET FORM
+  startTimer(selectedPC);
+
+  // reset form
   nama.value="";
-  nim.value="";
-  jurusan.value="";
+  durasi.value="";
+  totalHarga.innerText="Total: Rp 0";
   selectedPC=null;
 
+  save();
   renderPC();
+}
+
+/* TIMER */
+function startTimer(pc){
+  let interval=setInterval(()=>{
+    if(!bookings[pc]) return clearInterval(interval);
+
+    bookings[pc].sisa--;
+
+    if(bookings[pc].sisa<=0){
+      alert("Waktu habis di PC "+pc+"!");
+      delete bookings[pc];
+      clearInterval(interval);
+    }
+
+    save();
+    renderPC();
+  },1000);
+}
+
+/* SAVE */
+function save(){
+  localStorage.setItem("bookings",JSON.stringify(bookings));
 }
 
 /* INIT */
