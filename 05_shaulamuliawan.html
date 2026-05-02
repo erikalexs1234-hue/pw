@@ -3,58 +3,157 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>WarnetKu Pro Full System</title>
+<title>WarnetKu Jepang Edition</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
-body{background:#020617;color:white;}
 
-#loginPage{height:100vh;display:flex;justify-content:center;align-items:center;}
-.login-box{background:rgba(255,255,255,0.05);padding:30px;border-radius:15px;width:300px;}
+/* BACKGROUND JEPANG */
+body{
+  background:
+    linear-gradient(rgba(10,10,30,0.85), rgba(10,10,30,0.95)),
+    url('https://images.unsplash.com/photo-1505060892774-43e2e4c4d9b5');
+  background-size:cover;
+  background-position:center;
+  color:white;
+}
 
-input{width:100%;padding:10px;margin:8px 0;border:none;border-radius:8px;}
+/* LOGIN */
+#loginPage{
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
 
-.btn{padding:10px;border:none;border-radius:8px;width:100%;cursor:pointer;}
-.blue{background:#0ea5e9;}
-.green{background:#22c55e;}
+.login-box{
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(10px);
+  padding:30px;
+  border-radius:15px;
+  width:300px;
+}
 
+/* APP */
 #app{display:none;}
 
+/* SIDEBAR */
 .sidebar{
-  width:220px;height:100vh;background:#0f172a;
-  position:fixed;padding:20px;
+  width:220px;
+  height:100vh;
+  background:rgba(15,23,42,0.8);
+  backdrop-filter:blur(12px);
+  position:fixed;
+  padding:20px;
+  border-right:1px solid rgba(255,255,255,0.1);
 }
 
-.logo{display:flex;align-items:center;gap:10px;margin-bottom:30px;}
-.logo img{width:50px;filter:drop-shadow(0 0 10px cyan);}
+.logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:30px;
+}
+
+.logo img{
+  width:50px;
+  filter:drop-shadow(0 0 15px #ff00ff);
+}
 
 .menu div{
-  padding:10px;border-radius:8px;cursor:pointer;
+  padding:12px;
+  border-radius:10px;
+  cursor:pointer;
+  transition:0.3s;
 }
-.menu div:hover{background:rgba(255,255,255,0.1);}
 
-.content{margin-left:240px;padding:20px;}
+.menu div:hover{
+  background:linear-gradient(90deg,#ff00ff,#00f0ff);
+  box-shadow:0 0 10px #ff00ff;
+}
 
+/* CONTENT */
+.content{
+  margin-left:240px;
+  padding:20px;
+}
+
+/* CARD */
 .card{
-  background:rgba(255,255,255,0.05);
-  padding:20px;border-radius:15px;margin-bottom:20px;
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(10px);
+  padding:20px;
+  border-radius:20px;
+  margin-bottom:20px;
+  box-shadow:0 0 20px rgba(255,0,255,0.2);
 }
 
+/* INPUT */
+input{
+  width:100%;
+  padding:12px;
+  margin:8px 0;
+  border:none;
+  border-radius:10px;
+  background:rgba(255,255,255,0.1);
+  color:white;
+}
+
+/* BUTTON */
+.btn{
+  padding:12px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.blue{background:linear-gradient(90deg,#00f0ff,#6366f1);}
+.green{background:linear-gradient(90deg,#22c55e,#4ade80);}
+
+.btn:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 15px cyan;
+}
+
+/* PC GRID */
 .pc-grid{
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  gap:10px;margin-top:10px;
+  gap:10px;
+  margin-top:10px;
 }
 
-.pc{padding:15px;text-align:center;border-radius:10px;cursor:pointer;}
-.available{background:#16a34a;}
-.booked{background:#dc2626;}
-.selected{outline:3px solid cyan;}
+.pc{
+  padding:15px;
+  text-align:center;
+  border-radius:12px;
+  cursor:pointer;
+  transition:0.3s;
+}
 
-.fade{animation:fade 0.5s;}
-@keyframes fade{from{opacity:0;}to{opacity:1;}}
+.available{
+  background:linear-gradient(45deg,#22c55e,#16a34a);
+  box-shadow:0 0 10px #22c55e;
+}
+
+.booked{
+  background:linear-gradient(45deg,#ef4444,#dc2626);
+  box-shadow:0 0 10px #ef4444;
+}
+
+.selected{
+  outline:3px solid #00f0ff;
+  box-shadow:0 0 15px #00f0ff;
+}
+
+.fade{animation:fade 0.6s;}
+@keyframes fade{
+  from{opacity:0;transform:translateY(10px);}
+  to{opacity:1;transform:translateY(0);}
+}
 </style>
 </head>
 
@@ -63,10 +162,10 @@ input{width:100%;padding:10px;margin:8px 0;border:none;border-radius:8px;}
 <!-- LOGIN -->
 <div id="loginPage">
   <div class="login-box">
-    <h2>Login</h2>
+    <h2>ログイン (Login)</h2>
     <input id="user" placeholder="Username">
-    <input id="pass" type="password">
-    <button class="btn blue" onclick="login()">Login</button>
+    <input id="pass" type="password" placeholder="Password">
+    <button class="btn blue" onclick="login()">Masuk</button>
   </div>
 </div>
 
@@ -76,14 +175,14 @@ input{width:100%;padding:10px;margin:8px 0;border:none;border-radius:8px;}
 <div class="sidebar">
   <div class="logo">
     <img src="logo.png">
-    <b>WarnetKu</b>
+    <b>WarnetKu (ワーネット)</b>
   </div>
 
   <div class="menu">
-    <div onclick="showPage('booking')">Booking</div>
-    <div onclick="showPage('kasir')">Kasir</div>
-    <div onclick="showPage('laporan')">Laporan</div>
-    <div onclick="logout()">Logout</div>
+    <div onclick="showPage('booking')">🎮 Booking</div>
+    <div onclick="showPage('kasir')">💸 Kasir</div>
+    <div onclick="showPage('laporan')">📊 Laporan</div>
+    <div onclick="logout()">🚪 Logout</div>
   </div>
 </div>
 
@@ -91,28 +190,29 @@ input{width:100%;padding:10px;margin:8px 0;border:none;border-radius:8px;}
 
 <!-- BOOKING -->
 <div id="bookingPage" class="card fade">
-  <h3>Booking PC</h3>
+  <h3>🎮 Booking PC</h3>
 
-  <input id="nama" placeholder="Nama">
+  <input id="nama" placeholder="Nama User">
   <input id="durasi" type="number" placeholder="Durasi (jam)">
-  <p>Harga / jam: Rp 5.000</p>
+
+  <p>💰 Harga / jam: Rp 5.000</p>
   <p id="totalHarga">Total: Rp 0</p>
 
   <div class="pc-grid" id="pcList"></div>
 
-  <button class="btn blue" onclick="booking()">Booking</button>
+  <button class="btn blue" onclick="booking()">Booking Sekarang</button>
 </div>
 
 <!-- KASIR -->
 <div id="kasirPage" class="card" style="display:none;">
-  <h3>Kasir / Transaksi</h3>
+  <h3>💸 Kasir</h3>
   <ul id="transaksiList"></ul>
   <h4 id="totalUang">Total: Rp 0</h4>
 </div>
 
 <!-- LAPORAN -->
 <div id="laporanPage" class="card" style="display:none;">
-  <h3>Laporan Keuangan</h3>
+  <h3>📊 Laporan Keuangan</h3>
   <p id="laporanText"></p>
 </div>
 
@@ -132,6 +232,10 @@ function login(){
   app.style.display="block";
 }
 
+function logout(){
+  location.reload();
+}
+
 /* NAV */
 function showPage(p){
   bookingPage.style.display="none";
@@ -139,8 +243,8 @@ function showPage(p){
   laporanPage.style.display="none";
 
   if(p==="booking") bookingPage.style.display="block";
-  if(p==="kasir") kasirPage.style.display="block";
-  if(p==="laporan") laporanPage.style.display="block";
+  if(p==="kasir") renderKasir(),kasirPage.style.display="block";
+  if(p==="laporan") renderLaporan(),laporanPage.style.display="block";
 }
 
 /* HITUNG */
@@ -158,7 +262,7 @@ function renderPC(){
     div.className="pc "+(d?"booked":"available");
 
     if(d){
-      div.innerHTML=`PC ${i}<br>${d.nama}<br>${d.sisa}s`;
+      div.innerHTML=`PC ${i}<br>${d.nama}<br>⏰ ${d.sisa}s`;
     }else{
       div.innerHTML="PC "+i;
     }
@@ -206,9 +310,8 @@ function startTimer(pc){
     bookings[pc].sisa--;
 
     if(bookings[pc].sisa<=0){
-      alert("Waktu habis PC "+pc);
+      alert("⛔ Waktu habis PC "+pc);
 
-      // MASUK KE KASIR
       transaksi.push({
         nama:bookings[pc].nama,
         total:bookings[pc].total
@@ -243,7 +346,7 @@ function renderKasir(){
 /* LAPORAN */
 function renderLaporan(){
   let total=transaksi.reduce((a,b)=>a+b.total,0);
-  laporanText.innerText="Total pemasukan hari ini: Rp "+total;
+  laporanText.innerText="Total pemasukan: Rp "+total;
 }
 
 /* SAVE */
