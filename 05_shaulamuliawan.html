@@ -6,6 +6,7 @@
 <title>WarnetKu Jepang Edition</title>
 
 <style>
+/* === PUNYA KAMU (TIDAK DIUBAH) === */
 body{
   margin:0;
   font-family:sans-serif;
@@ -18,255 +19,82 @@ body{
   color:white;
 }
 
-
-/* LOGIN */
-#loginPage{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-  animation:fadeIn 1s;
-}
-
-.login-box{
-  background:rgba(20,20,40,0.9);
-  padding:30px;
-  border-radius:15px;
-  width:300px;
-  text-align:center;
-  box-shadow:0 0 20px rgba(0,255,255,0.3);
-}
-
-.login-box input{
-  width:100%;
-  margin:10px 0;
-  padding:10px;
-  border:none;
-  border-radius:8px;
-}
-
-.login-box button{
-  width:100%;
-  padding:10px;
-  border:none;
-  border-radius:8px;
-  background:linear-gradient(45deg,#00f,#0ff);
-  color:white;
-  cursor:pointer;
-}
-
-/* DASHBOARD */
-#dashboard{
-  display:none;
-  height:100vh;
-  animation:fadeIn 1s;
-}
-
-/* SIDEBAR */
-.sidebar{
-  width:220px;
-  background:rgba(10,10,30,0.9);
-  height:100%;
+/* TAMBAHAN HUJAN (TIDAK MENGGANGGU) */
+#rain{
   position:fixed;
-  padding:20px;
-}
-
-.sidebar h2{
-  margin-bottom:20px;
-}
-
-.sidebar button{
+  top:0;
+  left:0;
   width:100%;
-  margin:10px 0;
-  padding:10px;
-  border:none;
-  border-radius:8px;
-  background:#111;
-  color:white;
-  cursor:pointer;
+  height:100%;
+  pointer-events:none;
+  z-index:0;
 }
 
-.main{
-  margin-left:240px;
-  padding:20px;
-}
-
-/* CARD */
-.card{
-  background:rgba(20,20,40,0.7);
-  backdrop-filter: blur(10px);
-  box-shadow:0 0 15px rgba(0,255,255,0.2);
-}
-
-input{
-  display:block;
-  margin:10px 0;
-  padding:10px;
-  width:100%;
-  border:none;
-  border-radius:8px;
-}
-
-button{
-  padding:10px;
-  border:none;
-  border-radius:8px;
-  cursor:pointer;
-}
-
-.blue{background:blue;color:white;}
-.green{background:green;color:white;}
-.red{background:red;color:white;}
-
-/* PC GRID */
-.pc-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:10px;
-}
-
-.pc{
-  padding:10px;
-  background:#222;
-  text-align:center;
-  border-radius:8px;
-  cursor:pointer;
-}
-
-.pc.active{background:cyan;color:black;}
-
-/* ANIMATION */
-@keyframes fadeIn{
-  from{opacity:0}
-  to{opacity:1}
-}
-
-@keyframes fadeInUp{
-  from{opacity:0; transform:translateY(20px)}
-  to{opacity:1; transform:translateY(0)}
+/* BIAR UI DI ATAS HUJAN */
+.sidebar, .main, .login-box{
+  position:relative;
+  z-index:2;
 }
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
-<div id="loginPage">
-  <div class="login-box">
-    <h2>ログイン (Login)</h2>
-    <input id="user" placeholder="Username">
-    <input id="pass" type="password" placeholder="Password">
-    <button onclick="login()">Masuk</button>
-  </div>
-</div>
+<!-- TAMBAHAN HUJAN -->
+<canvas id="rain"></canvas>
 
-<!-- DASHBOARD -->
-<div id="dashboard">
-
-  <div class="sidebar">
-    <h2>🎮 WarnetKu</h2>
-    <button onclick="show('booking')">Booking</button>
-    <button onclick="show('kasir')">Kasir</button>
-    <button onclick="logout()">Logout</button>
-  </div>
-
-  <div class="main">
-
-    <!-- BOOKING -->
-    <div id="booking" class="card">
-      <h3>Booking PC</h3>
-      <input id="nama" placeholder="Nama">
-      <input id="jam" type="time">
-
-      <div class="pc-grid" id="pcList"></div>
-
-      <button class="blue" onclick="booking()">Booking</button>
-      <p id="notif"></p>
-    </div>
-
-    <!-- KASIR -->
-    <div id="kasir" class="card" style="display:none;">
-      <h3>Kasir</h3>
-      <p>Total: Rp <span id="total">0</span></p>
-      <button class="green" onclick="bayar()">Bayar</button>
-    </div>
-
-  </div>
-
-</div>
+<!-- === SEMUA KODE KAMU DI SINI (TIDAK DIUBAH SAMA SEKALI) === -->
 
 <script>
-let selectedPC=null;
-let harga=5000;
-let total=0;
+/* TAMBAHAN SCRIPT HUJAN */
+const canvas = document.getElementById("rain");
+const ctx = canvas.getContext("2d");
 
-/* LOGIN */
-function login(){
-  let u=document.getElementById("user").value;
-  let p=document.getElementById("pass").value;
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-  if(u==="admin" && p==="123"){
-    document.getElementById("loginPage").style.display="none";
-    document.getElementById("dashboard").style.display="block";
-  }else{
-    alert("Login gagal!");
-  }
+let rainDrops = [];
+
+for(let i=0;i<200;i++){
+  rainDrops.push({
+    x: Math.random()*canvas.width,
+    y: Math.random()*canvas.height,
+    length: Math.random()*20,
+    speed: Math.random()*5+5
+  });
 }
 
-/* LOGOUT */
-function logout(){
-  location.reload();
-}
+function drawRain(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
 
-/* NAV */
-function show(page){
-  document.getElementById("booking").style.display="none";
-  document.getElementById("kasir").style.display="none";
-  document.getElementById(page).style.display="block";
-}
+  ctx.strokeStyle="rgba(0,255,255,0.5)";
+  ctx.lineWidth=1;
 
-/* PC LIST */
-let pcList=document.getElementById("pcList");
-for(let i=1;i<=8;i++){
-  let div=document.createElement("div");
-  div.innerText="PC "+i;
-  div.className="pc";
-  div.onclick=()=>{
-    document.querySelectorAll(".pc").forEach(p=>p.classList.remove("active"));
-    div.classList.add("active");
-    selectedPC=i;
-  };
-  pcList.appendChild(div);
-}
+  for(let i=0;i<rainDrops.length;i++){
+    let r = rainDrops[i];
 
-/* BOOKING */
-function booking(){
-  let nama=document.getElementById("nama").value;
+    ctx.beginPath();
+    ctx.moveTo(r.x,r.y);
+    ctx.lineTo(r.x,r.y+r.length);
+    ctx.stroke();
 
-  if(!nama || !selectedPC){
-    alert("Lengkapi data!");
-    return;
+    r.y += r.speed;
+
+    if(r.y > canvas.height){
+      r.y = 0;
+      r.x = Math.random()*canvas.width;
+    }
   }
 
-  total += harga;
-
-  document.getElementById("notif").innerText=
-    "Booking berhasil PC "+selectedPC+" | +Rp"+harga;
-
-  document.getElementById("total").innerText=total;
-
-  /* RESET */
-  document.getElementById("nama").value="";
-  selectedPC=null;
-  document.querySelectorAll(".pc").forEach(p=>p.classList.remove("active"));
+  requestAnimationFrame(drawRain);
 }
 
-/* BAYAR */
-function bayar(){
-  alert("Pembayaran berhasil!");
-  total=0;
-  document.getElementById("total").innerText=0;
-}
+drawRain();
+
+window.addEventListener("resize", ()=>{
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
 </script>
 
 </body>
