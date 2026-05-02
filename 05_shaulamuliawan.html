@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -7,127 +8,74 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
-}
-
-/* BODY */
-body {
-  background: #020617;
-  color: white;
-}
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
+body { background:#020617; color:white; }
 
 /* LOGIN */
-#loginPage {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
+#loginPage { height:100vh; display:flex; justify-content:center; align-items:center; }
 .login-box {
-  background: rgba(255,255,255,0.05);
-  padding: 30px;
-  border-radius: 15px;
-  width: 300px;
-  backdrop-filter: blur(10px);
-  animation: fade 1s;
+  background:rgba(255,255,255,0.05);
+  padding:30px;
+  border-radius:15px;
+  width:300px;
 }
-
-.login-box input {
-  width: 100%;
-  margin: 10px 0;
-  padding: 10px;
-  border-radius: 8px;
-  border: none;
-}
+input { width:100%; padding:10px; margin:8px 0; border:none; border-radius:8px; }
 
 .btn {
-  padding: 10px;
-  border: none;
-  border-radius: 8px;
-  width: 100%;
-  cursor: pointer;
+  padding:10px; border:none; border-radius:8px;
+  width:100%; cursor:pointer;
 }
+.blue{background:#0ea5e9;}
+.green{background:#22c55e;}
+.red{background:#ef4444;}
 
-.blue { background: #0ea5e9; }
-.green { background: #22c55e; }
-.red { background: #ef4444; }
-
-/* APP */
-#app {
-  display: none;
-}
+#app{display:none;}
 
 /* SIDEBAR */
 .sidebar {
-  width: 220px;
-  height: 100vh;
-  background: #0f172a;
-  position: fixed;
-  padding: 20px;
+  width:220px; height:100vh;
+  background:#0f172a; position:fixed; padding:20px;
 }
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 30px;
-}
-
-.logo img {
-  width: 50px;
-  filter: drop-shadow(0 0 10px cyan);
-}
+.logo { display:flex; align-items:center; gap:10px; margin-bottom:30px; }
+.logo img { width:50px; filter:drop-shadow(0 0 10px cyan); }
 
 .menu div {
-  padding: 10px;
-  cursor: pointer;
-  border-radius: 8px;
+  padding:10px; border-radius:8px; cursor:pointer;
 }
-
-.menu div:hover {
-  background: rgba(255,255,255,0.1);
-}
+.menu div:hover { background:rgba(255,255,255,0.1); }
 
 /* CONTENT */
-.content {
-  margin-left: 240px;
-  padding: 20px;
-}
+.content { margin-left:240px; padding:20px; }
 
 .card {
-  background: rgba(255,255,255,0.05);
-  padding: 20px;
-  border-radius: 15px;
-  margin-bottom: 20px;
+  background:rgba(255,255,255,0.05);
+  padding:20px;
+  border-radius:15px;
+  margin-bottom:20px;
 }
 
 /* PC GRID */
 .pc-grid {
-  display: grid;
-  grid-template-columns: repeat(4,1fr);
-  gap: 10px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
 }
-
 .pc {
-  padding: 15px;
-  text-align: center;
-  border-radius: 10px;
-  cursor: pointer;
+  padding:15px;
+  text-align:center;
+  border-radius:10px;
+  cursor:pointer;
+  transition:0.2s;
 }
+.pc:hover { transform:scale(1.05); }
 
-.available { background: #16a34a; }
-.booked { background: #dc2626; }
+.available { background:#16a34a; }
+.booked { background:#dc2626; }
+.selected { outline:3px solid cyan; }
 
-/* ANIMATION */
-@keyframes fade {
-  from {opacity:0;}
-  to {opacity:1;}
-}
+/* ANIMASI */
+.fade { animation:fade 0.5s; }
+@keyframes fade { from{opacity:0;} to{opacity:1;} }
 </style>
 </head>
 
@@ -146,7 +94,6 @@ body {
 <!-- APP -->
 <div id="app">
 
-<!-- SIDEBAR -->
 <div class="sidebar">
   <div class="logo">
     <img src="logo.png">
@@ -155,20 +102,18 @@ body {
 
   <div class="menu">
     <div onclick="showPage('booking')">Booking</div>
-    <div onclick="showPage('absen')">Absensi</div>
     <div onclick="logout()">Logout</div>
   </div>
 </div>
 
-<!-- CONTENT -->
 <div class="content">
 
-<!-- BOOKING -->
-<div id="bookingPage" class="card">
+<div id="bookingPage" class="card fade">
   <h3>Booking PC</h3>
-  <input id="nama" placeholder="Nama"><br><br>
-  <input id="nim" placeholder="NIM"><br><br>
-  <input id="jurusan" placeholder="Jurusan"><br><br>
+
+  <input id="nama" placeholder="Nama">
+  <input id="nim" placeholder="NIM">
+  <input id="jurusan" placeholder="Jurusan">
 
   <div class="pc-grid" id="pcList"></div>
 
@@ -178,104 +123,77 @@ body {
   <img id="qr">
 </div>
 
-<!-- ABSEN -->
-<div id="absenPage" class="card" style="display:none;">
-  <h3>Absensi</h3>
-  <input id="namaKaryawan" placeholder="Nama"><br><br>
-  <button class="btn green" onclick="checkin()">Check-in</button>
-  <button class="btn red" onclick="checkout()">Check-out</button>
-
-  <ul id="absenList"></ul>
-</div>
-
 </div>
 </div>
 
 <script>
-let role = "";
 let selectedPC = null;
 let bookings = JSON.parse(localStorage.getItem("bookings")) || {};
-let absen = JSON.parse(localStorage.getItem("absen")) || [];
 
 /* LOGIN */
-function login() {
-  let u = user.value;
-  let p = pass.value;
-
-  if (u === "admin" && p === "admin") role = "admin";
-  else role = "user";
-
-  loginPage.style.display = "none";
-  app.style.display = "block";
+function login(){
+  loginPage.style.display="none";
+  app.style.display="block";
 }
 
 /* LOGOUT */
-function logout() {
+function logout(){
   location.reload();
 }
 
-/* PAGE SWITCH */
-function showPage(page) {
-  bookingPage.style.display = "none";
-  absenPage.style.display = "none";
+/* RENDER PC */
+function renderPC(){
+  pcList.innerHTML="";
+  for(let i=1;i<=12;i++){
+    let div=document.createElement("div");
+    div.className="pc "+(bookings[i]?"booked":"available");
 
-  if (page === "booking") bookingPage.style.display = "block";
-  if (page === "absen") absenPage.style.display = "block";
-}
+    if(bookings[i]){
+      div.innerHTML="PC "+i+"<br>"+bookings[i];
+    }else{
+      div.innerHTML="PC "+i;
+    }
 
-/* PC */
-function renderPC() {
-  pcList.innerHTML = "";
-  for (let i = 1; i <= 12; i++) {
-    let div = document.createElement("div");
-    div.className = "pc " + (bookings[i] ? "booked" : "available");
-    div.innerHTML = "PC " + i;
-    div.onclick = () => selectedPC = i;
+    div.onclick=()=>{
+      selectedPC=i;
+      renderPC();
+    }
+
+    if(selectedPC===i){
+      div.classList.add("selected");
+    }
+
     pcList.appendChild(div);
   }
 }
 
-/* BOOKING */
-function booking() {
-  if (!selectedPC) return alert("Pilih PC!");
+/* BOOKING + RESET */
+function booking(){
+  let namaVal = nama.value;
+  let nimVal = nim.value;
+  let jurusanVal = jurusan.value;
 
-  bookings[selectedPC] = nama.value;
-  localStorage.setItem("bookings", JSON.stringify(bookings));
+  if(!selectedPC) return alert("Pilih PC!");
 
-  qr.src = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + nama.value;
+  bookings[selectedPC]=namaVal;
+  localStorage.setItem("bookings",JSON.stringify(bookings));
+
+  // QR
+  qr.src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data="+namaVal;
+
+  // 🔥 RESET FORM
+  nama.value="";
+  nim.value="";
+  jurusan.value="";
+  selectedPC=null;
+
   renderPC();
 }
 
-/* ABSEN */
-function checkin() {
-  absen.push(namaKaryawan.value + " (IN)");
-  saveAbsen();
-}
-
-function checkout() {
-  absen.push(namaKaryawan.value + " (OUT)");
-  saveAbsen();
-}
-
-function saveAbsen() {
-  localStorage.setItem("absen", JSON.stringify(absen));
-  renderAbsen();
-}
-
-function renderAbsen() {
-  absenList.innerHTML = "";
-  absen.forEach(a => {
-    let li = document.createElement("li");
-    li.innerText = a;
-    absenList.appendChild(li);
-  });
-}
-
+/* INIT */
 renderPC();
-renderAbsen();
 </script>
 
 </body>
 </html>
 ```
-
