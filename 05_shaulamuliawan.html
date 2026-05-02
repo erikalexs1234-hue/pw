@@ -10,13 +10,14 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
 
-/* BACKGROUND JEPANG */
+/* ✅ BACKGROUND DARI FILE GITHUB KAMU */
 body{
   background:
-    linear-gradient(rgba(10,10,30,0.85), rgba(10,10,30,0.95)),
-    url('https://images.unsplash.com/photo-1505060892774-43e2e4c4d9b5');
+    linear-gradient(rgba(5,5,20,0.8), rgba(5,5,20,0.95)),
+    url('tokyo%20japan.jpg');
   background-size:cover;
   background-position:center;
+  background-attachment:fixed;
   color:white;
 }
 
@@ -36,7 +37,6 @@ body{
   width:300px;
 }
 
-/* APP */
 #app{display:none;}
 
 /* SIDEBAR */
@@ -47,7 +47,6 @@ body{
   backdrop-filter:blur(12px);
   position:fixed;
   padding:20px;
-  border-right:1px solid rgba(255,255,255,0.1);
 }
 
 .logo{
@@ -149,6 +148,7 @@ input{
   box-shadow:0 0 15px #00f0ff;
 }
 
+/* ANIMASI */
 .fade{animation:fade 0.6s;}
 @keyframes fade{
   from{opacity:0;transform:translateY(10px);}
@@ -226,7 +226,6 @@ let transaksi=JSON.parse(localStorage.getItem("transaksi"))||[];
 
 const hargaPerJam=5000;
 
-/* LOGIN */
 function login(){
   loginPage.style.display="none";
   app.style.display="block";
@@ -236,7 +235,6 @@ function logout(){
   location.reload();
 }
 
-/* NAV */
 function showPage(p){
   bookingPage.style.display="none";
   kasirPage.style.display="none";
@@ -247,12 +245,10 @@ function showPage(p){
   if(p==="laporan") renderLaporan(),laporanPage.style.display="block";
 }
 
-/* HITUNG */
 durasi.oninput=()=>{
   totalHarga.innerText="Total: Rp "+(durasi.value*hargaPerJam||0);
 }
 
-/* RENDER PC */
 function renderPC(){
   pcList.innerHTML="";
   for(let i=1;i<=12;i++){
@@ -278,7 +274,6 @@ function renderPC(){
   }
 }
 
-/* BOOKING */
 function booking(){
   let namaVal=nama.value;
   let durasiVal=parseInt(durasi.value);
@@ -302,7 +297,6 @@ function booking(){
   renderPC();
 }
 
-/* TIMER */
 function startTimer(pc){
   let interval=setInterval(()=>{
     if(!bookings[pc]) return clearInterval(interval);
@@ -328,7 +322,6 @@ function startTimer(pc){
   },1000);
 }
 
-/* KASIR */
 function renderKasir(){
   transaksiList.innerHTML="";
   let total=0;
@@ -343,19 +336,16 @@ function renderKasir(){
   totalUang.innerText="Total: Rp "+total;
 }
 
-/* LAPORAN */
 function renderLaporan(){
   let total=transaksi.reduce((a,b)=>a+b.total,0);
   laporanText.innerText="Total pemasukan: Rp "+total;
 }
 
-/* SAVE */
 function save(){
   localStorage.setItem("bookings",JSON.stringify(bookings));
   localStorage.setItem("transaksi",JSON.stringify(transaksi));
 }
 
-/* INIT */
 renderPC();
 renderKasir();
 renderLaporan();
