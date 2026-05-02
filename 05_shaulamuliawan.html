@@ -3,15 +3,13 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WarnetKu Jepang Edition</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
-
-/* ✅ BACKGROUND DARI FILE GITHUB KAMU */
 body{
+  margin:0;
+  font-family:sans-serif;
   background:
     linear-gradient(rgba(5,5,20,0.75), rgba(5,5,20,0.95)),
     url('tokyo%20japan.jpg');
@@ -19,141 +17,136 @@ body{
   background-position:center;
   background-attachment:fixed;
   color:white;
-}
+  overflow:hidden;
 }
 
 /* LOGIN */
 #loginPage{
-  height:100vh;
   display:flex;
   justify-content:center;
   align-items:center;
+  height:100vh;
+  animation:fadeIn 1s;
 }
 
 .login-box{
-  background:rgba(255,255,255,0.08);
-  backdrop-filter:blur(10px);
+  background:rgba(20,20,40,0.9);
   padding:30px;
   border-radius:15px;
   width:300px;
+  text-align:center;
+  box-shadow:0 0 20px rgba(0,255,255,0.3);
 }
 
-#app{display:none;}
+.login-box input{
+  width:100%;
+  margin:10px 0;
+  padding:10px;
+  border:none;
+  border-radius:8px;
+}
+
+.login-box button{
+  width:100%;
+  padding:10px;
+  border:none;
+  border-radius:8px;
+  background:linear-gradient(45deg,#00f,#0ff);
+  color:white;
+  cursor:pointer;
+}
+
+/* DASHBOARD */
+#dashboard{
+  display:none;
+  height:100vh;
+  animation:fadeIn 1s;
+}
 
 /* SIDEBAR */
 .sidebar{
   width:220px;
-  height:100vh;
-  background:rgba(15,23,42,0.8);
-  backdrop-filter:blur(12px);
+  background:rgba(10,10,30,0.9);
+  height:100%;
   position:fixed;
   padding:20px;
 }
 
-.logo{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-bottom:30px;
+.sidebar h2{
+  margin-bottom:20px;
 }
 
-.logo img{
-  width:50px;
-  filter:drop-shadow(0 0 15px #ff00ff);
-}
-
-.menu div{
-  padding:12px;
-  border-radius:10px;
+.sidebar button{
+  width:100%;
+  margin:10px 0;
+  padding:10px;
+  border:none;
+  border-radius:8px;
+  background:#111;
+  color:white;
   cursor:pointer;
-  transition:0.3s;
 }
 
-.menu div:hover{
-  background:linear-gradient(90deg,#ff00ff,#00f0ff);
-  box-shadow:0 0 10px #ff00ff;
-}
-
-/* CONTENT */
-.content{
+.main{
   margin-left:240px;
   padding:20px;
 }
 
 /* CARD */
 .card{
-  background:rgba(255,255,255,0.08);
-  backdrop-filter:blur(10px);
+  background:rgba(20,20,40,0.85);
   padding:20px;
-  border-radius:20px;
+  border-radius:12px;
   margin-bottom:20px;
-  box-shadow:0 0 20px rgba(255,0,255,0.2);
+  animation:fadeInUp 0.7s;
 }
 
-/* INPUT */
 input{
+  display:block;
+  margin:10px 0;
+  padding:10px;
   width:100%;
-  padding:12px;
-  margin:8px 0;
   border:none;
-  border-radius:10px;
-  background:rgba(255,255,255,0.1);
-  color:white;
+  border-radius:8px;
 }
 
-/* BUTTON */
-.btn{
-  padding:12px;
+button{
+  padding:10px;
   border:none;
-  border-radius:10px;
+  border-radius:8px;
   cursor:pointer;
-  transition:0.3s;
 }
 
-.blue{background:linear-gradient(90deg,#00f0ff,#6366f1);}
-.green{background:linear-gradient(90deg,#22c55e,#4ade80);}
-
-.btn:hover{
-  transform:scale(1.05);
-  box-shadow:0 0 15px cyan;
-}
+.blue{background:blue;color:white;}
+.green{background:green;color:white;}
+.red{background:red;color:white;}
 
 /* PC GRID */
 .pc-grid{
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:10px;
-  margin-top:10px;
 }
 
 .pc{
-  padding:15px;
+  padding:10px;
+  background:#222;
   text-align:center;
-  border-radius:12px;
+  border-radius:8px;
   cursor:pointer;
-  transition:0.3s;
 }
 
-.available{
-  background:linear-gradient(45deg,#22c55e,#16a34a);
-  box-shadow:0 0 10px #22c55e;
+.pc.active{background:cyan;color:black;}
+
+/* ANIMATION */
+@keyframes fadeIn{
+  from{opacity:0}
+  to{opacity:1}
 }
 
-.booked{
-  background:linear-gradient(45deg,#ef4444,#dc2626);
-  box-shadow:0 0 10px #ef4444;
-}
-
-.selected{
-  outline:3px solid #00f0ff;
-  box-shadow:0 0 15px #00f0ff;
-}
-
-/* ANIMASI */
-.fade{animation:fade 0.6s;}
-@keyframes fade{
-  from{opacity:0;transform:translateY(10px);}
-  to{opacity:1;transform:translateY(0);}
+@keyframes fadeInUp{
+  from{opacity:0; transform:translateY(20px)}
+  to{opacity:1; transform:translateY(0)}
 }
 </style>
 </head>
@@ -166,190 +159,117 @@ input{
     <h2>ログイン (Login)</h2>
     <input id="user" placeholder="Username">
     <input id="pass" type="password" placeholder="Password">
-    <button class="btn blue" onclick="login()">Masuk</button>
+    <button onclick="login()">Masuk</button>
   </div>
 </div>
 
-<!-- APP -->
-<div id="app">
+<!-- DASHBOARD -->
+<div id="dashboard">
 
-<div class="sidebar">
-  <div class="logo">
-    <img src="logo.png">
-    <b>WarnetKu (ワーネット)</b>
+  <div class="sidebar">
+    <h2>🎮 WarnetKu</h2>
+    <button onclick="show('booking')">Booking</button>
+    <button onclick="show('kasir')">Kasir</button>
+    <button onclick="logout()">Logout</button>
   </div>
 
-  <div class="menu">
-    <div onclick="showPage('booking')">🎮 Booking</div>
-    <div onclick="showPage('kasir')">💸 Kasir</div>
-    <div onclick="showPage('laporan')">📊 Laporan</div>
-    <div onclick="logout()">🚪 Logout</div>
+  <div class="main">
+
+    <!-- BOOKING -->
+    <div id="booking" class="card">
+      <h3>Booking PC</h3>
+      <input id="nama" placeholder="Nama">
+      <input id="jam" type="time">
+
+      <div class="pc-grid" id="pcList"></div>
+
+      <button class="blue" onclick="booking()">Booking</button>
+      <p id="notif"></p>
+    </div>
+
+    <!-- KASIR -->
+    <div id="kasir" class="card" style="display:none;">
+      <h3>Kasir</h3>
+      <p>Total: Rp <span id="total">0</span></p>
+      <button class="green" onclick="bayar()">Bayar</button>
+    </div>
+
   </div>
-</div>
 
-<div class="content">
-
-<!-- BOOKING -->
-<div id="bookingPage" class="card fade">
-  <h3>🎮 Booking PC</h3>
-
-  <input id="nama" placeholder="Nama User">
-  <input id="durasi" type="number" placeholder="Durasi (jam)">
-
-  <p>💰 Harga / jam: Rp 5.000</p>
-  <p id="totalHarga">Total: Rp 0</p>
-
-  <div class="pc-grid" id="pcList"></div>
-
-  <button class="btn blue" onclick="booking()">Booking Sekarang</button>
-</div>
-
-<!-- KASIR -->
-<div id="kasirPage" class="card" style="display:none;">
-  <h3>💸 Kasir</h3>
-  <ul id="transaksiList"></ul>
-  <h4 id="totalUang">Total: Rp 0</h4>
-</div>
-
-<!-- LAPORAN -->
-<div id="laporanPage" class="card" style="display:none;">
-  <h3>📊 Laporan Keuangan</h3>
-  <p id="laporanText"></p>
-</div>
-
-</div>
 </div>
 
 <script>
 let selectedPC=null;
-let bookings=JSON.parse(localStorage.getItem("bookings"))||{};
-let transaksi=JSON.parse(localStorage.getItem("transaksi"))||[];
+let harga=5000;
+let total=0;
 
-const hargaPerJam=5000;
-
+/* LOGIN */
 function login(){
-  loginPage.style.display="none";
-  app.style.display="block";
+  let u=document.getElementById("user").value;
+  let p=document.getElementById("pass").value;
+
+  if(u==="admin" && p==="123"){
+    document.getElementById("loginPage").style.display="none";
+    document.getElementById("dashboard").style.display="block";
+  }else{
+    alert("Login gagal!");
+  }
 }
 
+/* LOGOUT */
 function logout(){
   location.reload();
 }
 
-function showPage(p){
-  bookingPage.style.display="none";
-  kasirPage.style.display="none";
-  laporanPage.style.display="none";
-
-  if(p==="booking") bookingPage.style.display="block";
-  if(p==="kasir") renderKasir(),kasirPage.style.display="block";
-  if(p==="laporan") renderLaporan(),laporanPage.style.display="block";
+/* NAV */
+function show(page){
+  document.getElementById("booking").style.display="none";
+  document.getElementById("kasir").style.display="none";
+  document.getElementById(page).style.display="block";
 }
 
-durasi.oninput=()=>{
-  totalHarga.innerText="Total: Rp "+(durasi.value*hargaPerJam||0);
+/* PC LIST */
+let pcList=document.getElementById("pcList");
+for(let i=1;i<=8;i++){
+  let div=document.createElement("div");
+  div.innerText="PC "+i;
+  div.className="pc";
+  div.onclick=()=>{
+    document.querySelectorAll(".pc").forEach(p=>p.classList.remove("active"));
+    div.classList.add("active");
+    selectedPC=i;
+  };
+  pcList.appendChild(div);
 }
 
-function renderPC(){
-  pcList.innerHTML="";
-  for(let i=1;i<=12;i++){
-    let d=bookings[i];
-    let div=document.createElement("div");
-
-    div.className="pc "+(d?"booked":"available");
-
-    if(d){
-      div.innerHTML=`PC ${i}<br>${d.nama}<br>⏰ ${d.sisa}s`;
-    }else{
-      div.innerHTML="PC "+i;
-    }
-
-    div.onclick=()=>{
-      selectedPC=i;
-      renderPC();
-    }
-
-    if(selectedPC===i) div.classList.add("selected");
-
-    pcList.appendChild(div);
-  }
-}
-
+/* BOOKING */
 function booking(){
-  let namaVal=nama.value;
-  let durasiVal=parseInt(durasi.value);
+  let nama=document.getElementById("nama").value;
 
-  if(!selectedPC) return alert("Pilih PC!");
-  if(!durasiVal) return alert("Isi durasi!");
+  if(!nama || !selectedPC){
+    alert("Lengkapi data!");
+    return;
+  }
 
-  let total=durasiVal*hargaPerJam;
-  let detik=durasiVal*60;
+  total += harga;
 
-  bookings[selectedPC]={nama:namaVal,sisa:detik,total:total};
+  document.getElementById("notif").innerText=
+    "Booking berhasil PC "+selectedPC+" | +Rp"+harga;
 
-  startTimer(selectedPC);
+  document.getElementById("total").innerText=total;
 
-  nama.value="";
-  durasi.value="";
-  totalHarga.innerText="Total: Rp 0";
+  /* RESET */
+  document.getElementById("nama").value="";
   selectedPC=null;
-
-  save();
-  renderPC();
+  document.querySelectorAll(".pc").forEach(p=>p.classList.remove("active"));
 }
 
-function startTimer(pc){
-  let interval=setInterval(()=>{
-    if(!bookings[pc]) return clearInterval(interval);
-
-    bookings[pc].sisa--;
-
-    if(bookings[pc].sisa<=0){
-      alert("⛔ Waktu habis PC "+pc);
-
-      transaksi.push({
-        nama:bookings[pc].nama,
-        total:bookings[pc].total
-      });
-
-      delete bookings[pc];
-      clearInterval(interval);
-      renderKasir();
-      renderLaporan();
-    }
-
-    save();
-    renderPC();
-  },1000);
+/* BAYAR */
+function bayar(){
+  alert("Pembayaran berhasil!");
+  total=0;
+  document.getElementById("total").innerText=0;
 }
-
-function renderKasir(){
-  transaksiList.innerHTML="";
-  let total=0;
-
-  transaksi.forEach(t=>{
-    let li=document.createElement("li");
-    li.innerText=`${t.nama} - Rp ${t.total}`;
-    transaksiList.appendChild(li);
-    total+=t.total;
-  });
-
-  totalUang.innerText="Total: Rp "+total;
-}
-
-function renderLaporan(){
-  let total=transaksi.reduce((a,b)=>a+b.total,0);
-  laporanText.innerText="Total pemasukan: Rp "+total;
-}
-
-function save(){
-  localStorage.setItem("bookings",JSON.stringify(bookings));
-  localStorage.setItem("transaksi",JSON.stringify(transaksi));
-}
-
-renderPC();
-renderKasir();
-renderLaporan();
 </script>
 
 </body>
