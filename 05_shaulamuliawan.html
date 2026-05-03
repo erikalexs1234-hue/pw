@@ -19,18 +19,7 @@ body{
   overflow:hidden;
 }
 
-/* HUJAN */
-#rain{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  pointer-events:none;
-  z-index:1;
-}
-
-/* UI DI ATAS HUJAN */
+/* UI */
 .sidebar, .main, .login-box{
   position:relative;
   z-index:2;
@@ -105,6 +94,8 @@ body{
   padding:20px;
   border-radius:12px;
   margin-bottom:20px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 0 20px rgba(0,255,255,0.2);
 }
 
 input{
@@ -120,6 +111,11 @@ button{
   padding:10px;
   border:none;
   border-radius:8px;
+}
+
+button:hover{
+  opacity:0.8;
+  cursor:pointer;
 }
 
 .blue{background:blue;color:white;}
@@ -138,6 +134,11 @@ button{
   text-align:center;
   border-radius:8px;
   cursor:pointer;
+  transition:0.2s;
+}
+
+.pc:hover{
+  transform:scale(1.05);
 }
 
 .pc.active{
@@ -149,7 +150,10 @@ button{
 
 <body>
 
-<canvas id="rain"></canvas>
+<!-- AUDIO -->
+<audio id="alarmSound">
+  <source src="https://www.soundjay.com/buttons/beep-07.mp3">
+</audio>
 
 <!-- LOGIN -->
 <div id="loginPage">
@@ -178,16 +182,29 @@ button{
     <div id="booking" class="card">
       <h3>Booking PC</h3>
       <input id="nama" placeholder="Nama">
-      <input id="jam" type="time">
+      <input id="durasi" type="number" placeholder="Durasi (jam)">
+      
       <div class="pc-grid" id="pcList"></div>
       <button class="blue" onclick="booking()">Booking</button>
       <p id="notif"></p>
+
+      <!-- DASHBOARD HARGA -->
+      <div style="margin-top:20px;">
+        <h4>Daftar Harga Billing</h4>
+        <table style="width:100%;">
+          <tr><th>Durasi</th><th>Harga</th></tr>
+          <tr><td>1 Jam</td><td>Rp 5.000</td></tr>
+          <tr><td>2 Jam</td><td>Rp 9.000</td></tr>
+          <tr><td>3 Jam</td><td>Rp 13.000</td></tr>
+        </table>
+      </div>
     </div>
 
     <!-- KASIR -->
     <div id="kasir" class="card" style="display:none;">
       <h3>Kasir</h3>
       <button class="green" onclick="bayar()">Bayar Semua</button>
+      <p id="totalUang">Total: Rp 0</p>
     </div>
 
     <!-- KARYAWAN -->
@@ -199,16 +216,15 @@ button{
     </div>
 
   </div>
-
 </div>
 
 <script>
 let selectedPC=null;
 let harga=5000;
 
-/* STORAGE */
 let dataPC = JSON.parse(localStorage.getItem("pc")) || {};
 let dataKaryawan = JSON.parse(localStorage.getItem("karyawan")) || [];
+let totalPendapatan = localStorage.getItem("totalUang") || 0;
 
 /* LOGIN */
 function login(){
@@ -220,17 +236,14 @@ function login(){
     document.getElementById("dashboard").style.display="block";
     renderPC();
     renderKaryawan();
+    updateTotal();
   }else{
     alert("Login gagal!");
   }
 }
 
-/* LOGOUT */
-function logout(){
-  location.reload();
-}
+function logout(){ location.reload(); }
 
-/* NAV */
 function show(page){
   document.getElementById("booking").style.display="none";
   document.getElementById("kasir").style.display="none";
@@ -238,17 +251,17 @@ function show(page){
   document.getElementById(page).style.display="block";
 }
 
-/* PC SYSTEM */
+/* PC */
 let pcList=document.getElementById("pcList");
 
 function renderPC(){
   pcList.innerHTML="";
-
   for(let i=1;i<=8;i++){
     let div=document.createElement("div");
     div.className="pc";
 
-    let status = dataPC[i]?.status || "Kosong";
+    let data = dataPC[i];
+    let status = data?.status || "Kosong";
 
     div.innerHTML = `
       PC ${i}<br>
@@ -263,7 +276,7 @@ function renderPC(){
 
     div.onclick=()=>{
       if(status==="Dipakai"){
-        alert("PC sedang dipakai!");
+        document.getElementById("notif").innerText="PC sedang dipakai!";
         return;
       }
 
@@ -279,43 +292,64 @@ function renderPC(){
 /* BOOKING */
 function booking(){
   let nama=document.getElementById("nama").value;
+  let durasi=document.getElementById("durasi").value;
 
-  if(!nama || !selectedPC){
-    alert("Lengkapi data!");
+  if(!nama || !selectedPC || !durasi){
+    document.getElementById("notif").innerText="Lengkapi data!";
     return;
   }
 
-  let start = new Date().getTime();
+  let end = new Date().getTime() + (durasi * 3600000);
+  let biaya = durasi * harga;
 
   dataPC[selectedPC]={
     nama,
-    start,
+    end,
+    durasi,
+    biaya,
     status:"Dipakai"
   };
 
   localStorage.setItem("pc", JSON.stringify(dataPC));
-
   renderPC();
 
   document.getElementById("notif").innerText=
-    "Booking PC "+selectedPC+" berhasil";
+    "Booking PC "+selectedPC+" | Rp "+biaya;
 
   selectedPC=null;
 }
 
-/* TIMER */
+/* TIMER + ALARM */
 function startTimer(pc){
-  setInterval(()=>{
+  let interval = setInterval(()=>{
     if(!dataPC[pc]) return;
 
     let now = new Date().getTime();
-    let diff = Math.floor((now - dataPC[pc].start)/1000);
+    let sisa = Math.floor((dataPC[pc].end - now)/1000);
 
-    let jam = Math.floor(diff/3600);
-    let menit = Math.floor((diff%3600)/60);
-    let detik = diff%60;
+    if(sisa <= 0){
+      clearInterval(interval);
 
-    let el = document.getElementById("timer"+pc);
+      totalPendapatan = parseInt(totalPendapatan) + dataPC[pc].biaya;
+      localStorage.setItem("totalUang", totalPendapatan);
+
+      document.getElementById("alarmSound").play();
+
+      document.getElementById("notif").innerText =
+        "Waktu PC "+pc+" habis!";
+
+      delete dataPC[pc];
+      localStorage.setItem("pc", JSON.stringify(dataPC));
+      renderPC();
+      updateTotal();
+      return;
+    }
+
+    let jam = Math.floor(sisa/3600);
+    let menit = Math.floor((sisa%3600)/60);
+    let detik = sisa%60;
+
+    let el=document.getElementById("timer"+pc);
     if(el){
       el.innerText = jam+"j "+menit+"m "+detik+"s";
     }
@@ -325,19 +359,28 @@ function startTimer(pc){
 /* KASIR */
 function bayar(){
   let total=0;
-
   for(let pc in dataPC){
-    let now = new Date().getTime();
-    let durasi = (now - dataPC[pc].start)/3600000;
-
-    total += Math.ceil(durasi) * harga;
+    total += dataPC[pc].biaya || harga;
   }
 
-  alert("Total bayar: Rp "+total);
+  totalPendapatan = parseInt(totalPendapatan) + total;
+  localStorage.setItem("totalUang", totalPendapatan);
+
+  document.getElementById("notif").innerText =
+    "Pembayaran berhasil Rp "+total;
 
   dataPC={};
   localStorage.setItem("pc", JSON.stringify(dataPC));
   renderPC();
+  updateTotal();
+}
+
+/* TOTAL */
+function updateTotal(){
+  let el = document.getElementById("totalUang");
+  if(el){
+    el.innerText = "Total: Rp " + totalPendapatan;
+  }
 }
 
 /* KARYAWAN */
@@ -372,54 +415,9 @@ function renderKaryawan(){
 window.onload=()=>{
   renderPC();
   renderKaryawan();
+  updateTotal();
 };
-
-/* HUJAN */
-const canvas = document.getElementById("rain");
-const ctx = canvas.getContext("2d");
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-let rainDrops = [];
-
-for(let i=0;i<180;i++){
-  rainDrops.push({
-    x: Math.random()*canvas.width,
-    y: Math.random()*canvas.height,
-    length: Math.random()*20,
-    speed: Math.random()*4+4
-  });
-}
-
-function drawRain(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-
-  ctx.strokeStyle="rgba(0,255,255,0.4)";
-  ctx.lineWidth=1;
-
-  for(let i=0;i<rainDrops.length;i++){
-    let r = rainDrops[i];
-
-    ctx.beginPath();
-    ctx.moveTo(r.x,r.y);
-    ctx.lineTo(r.x,r.y+r.length);
-    ctx.stroke();
-
-    r.y += r.speed;
-
-    if(r.y > canvas.height){
-      r.y = 0;
-      r.x = Math.random()*canvas.width;
-    }
-  }
-
-  requestAnimationFrame(drawRain);
-}
-
-drawRain();
 </script>
 
 </body>
 </html>
-```
