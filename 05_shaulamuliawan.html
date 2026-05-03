@@ -12,6 +12,7 @@ body{
   color:white;
 }
 
+/* ANIMASI BACKGROUND FIX */
 canvas{
   position:fixed;
   top:0;
@@ -20,6 +21,7 @@ canvas{
   pointer-events:none;
 }
 
+/* LOGIN */
 .login{
   position:relative;
   z-index:10;
@@ -35,6 +37,7 @@ canvas{
   border-radius:15px;
 }
 
+/* DASHBOARD */
 .dashboard{ display:none; }
 
 .sidebar{
@@ -127,17 +130,9 @@ canvas{
     <div id="billing" style="display:none">
       <h2>Daftar Harga Billing</h2>
 
-      <div class="box">
-        PC Reguler : Rp 5.000 / jam
-      </div>
-
-      <div class="box">
-        PC Gaming : Rp 10.000 / jam
-      </div>
-
-      <div class="box">
-        VIP Room : Rp 15.000 / jam
-      </div>
+      <div class="box">PC Reguler : Rp 5.000 / jam</div>
+      <div class="box">PC Gaming : Rp 10.000 / jam</div>
+      <div class="box">VIP Room : Rp 15.000 / jam</div>
     </div>
 
   </div>
@@ -147,15 +142,16 @@ canvas{
 let dataPC = JSON.parse(localStorage.getItem("pc")) || {};
 let karyawan = JSON.parse(localStorage.getItem("karyawan")) || [];
 let harga = 5000;
+let timers = {}; // FIX TIMER DOBEL
 
 /* LOGIN */
 function login(){
-  let u = user.value;
-  let p = pass.value;
+  let u = document.getElementById("user").value;
+  let p = document.getElementById("pass").value;
 
   if(u && p){
-    loginPage.style.display="none";
-    app.style.display="block";
+    document.getElementById("loginPage").style.display="none";
+    document.getElementById("app").style.display="block";
     renderPC();
     renderKaryawan();
   }else{
@@ -165,17 +161,17 @@ function login(){
 
 /* NAV */
 function show(menu){
-  booking.style.display="none";
-  kasir.style.display="none";
-  karyawan.style.display="none";
-  billing.style.display="none";
-
+  ["booking","kasir","karyawan","billing"].forEach(id=>{
+    let el = document.getElementById(id);
+    if(el) el.style.display="none";
+  });
   document.getElementById(menu).style.display="block";
 }
 
 /* BOOKING */
 function renderPC(){
-  listPC.innerHTML="";
+  let list = document.getElementById("listPC");
+  list.innerHTML="";
 
   for(let i=1;i<=5;i++){
     let pc = dataPC[i];
@@ -197,12 +193,14 @@ function renderPC(){
       `;
     }
 
-    listPC.appendChild(div);
+    list.appendChild(div);
   }
 }
 
 function bookingPC(pc){
-  let d = document.getElementById("durasi"+pc).value;
+  let input = document.getElementById("durasi"+pc);
+  let d = input ? input.value : null;
+
   if(!d) return alert("Isi durasi!");
 
   dataPC[pc]={ start:Date.now(), durasi:parseInt(d) };
@@ -212,9 +210,12 @@ function bookingPC(pc){
 
 /* TIMER */
 function startTimer(pc){
-  let interval = setInterval(()=>{
+
+  if(timers[pc]) clearInterval(timers[pc]);
+
+  timers[pc] = setInterval(()=>{
     if(!dataPC[pc]){
-      clearInterval(interval);
+      clearInterval(timers[pc]);
       return;
     }
 
@@ -227,15 +228,18 @@ function startTimer(pc){
 
     if(sisa <= 0){
       showNotif("PC "+pc+" waktu habis!");
+
       delete dataPC[pc];
       localStorage.setItem("pc", JSON.stringify(dataPC));
+
+      clearInterval(timers[pc]);
       renderPC();
-      clearInterval(interval);
       return;
     }
 
     let m = Math.floor(elapsed/60);
     let s = elapsed%60;
+
     if(el) el.innerText = m+"m "+s+"s";
 
   },1000);
@@ -243,31 +247,48 @@ function startTimer(pc){
 
 /* STOP */
 function stopPC(pc){
-  let totalBayar = dataPC[pc].durasi * harga;
+  let data = dataPC[pc];
+  if(!data) return;
+
+  let totalBayar = data.durasi * harga;
   alert("Total bayar: Rp "+totalBayar);
 
   delete dataPC[pc];
   localStorage.setItem("pc", JSON.stringify(dataPC));
+
+  if(timers[pc]) clearInterval(timers[pc]);
+
   renderPC();
 }
 
 /* KARYAWAN */
 function tambahKaryawan(){
-  let nama = namaKaryawan.value;
+  let input = document.getElementById("namaKaryawan");
+  let nama = input.value;
+
   if(!nama) return alert("Isi nama!");
 
   karyawan.push(nama);
   localStorage.setItem("karyawan", JSON.stringify(karyawan));
+
+  input.value="";
   renderKaryawan();
 }
 
 function renderKaryawan(){
-  listKaryawan.innerHTML="";
+  let list = document.getElementById("listKaryawan");
+  list.innerHTML="";
+
   karyawan.forEach((k,i)=>{
     let div = document.createElement("div");
     div.className="box";
-    div.innerHTML = `${k} <button onclick="hapusKaryawan(${i})">Hapus</button>`;
-    listKaryawan.appendChild(div);
+
+    div.innerHTML = `
+      ${k}
+      <button onclick="hapusKaryawan(${i})">Hapus</button>
+    `;
+
+    list.appendChild(div);
   });
 }
 
@@ -282,6 +303,7 @@ function showNotif(text){
   let n = document.createElement("div");
   n.className="notif";
   n.innerText=text;
+
   document.body.appendChild(n);
   setTimeout(()=>n.remove(),3000);
 }
@@ -295,18 +317,24 @@ c.width = window.innerWidth;
 
 let rain = [];
 for(let i=0;i<100;i++){
-  rain.push({x:Math.random()*c.width,y:Math.random()*c.height,l:Math.random()*20});
+  rain.push({
+    x:Math.random()*c.width,
+    y:Math.random()*c.height,
+    l:Math.random()*20
+  });
 }
 
 function draw(){
   ctx.clearRect(0,0,c.width,c.height);
   ctx.fillStyle="cyan";
+
   rain.forEach(r=>{
     ctx.fillRect(r.x,r.y,2,r.l);
     r.y+=10;
     if(r.y>c.height) r.y=0;
   });
 }
+
 setInterval(draw,50);
 </script>
 
