@@ -19,7 +19,7 @@ body{
   overflow:hidden;
 }
 
-/* TAMBAHAN HUJAN */
+/* HUJAN */
 #rain{
   position:fixed;
   top:0;
@@ -30,7 +30,7 @@ body{
   z-index:1;
 }
 
-/* PASTIKAN UI DI ATAS HUJAN */
+/* UI DI ATAS HUJAN */
 .sidebar, .main, .login-box{
   position:relative;
   z-index:2;
@@ -42,7 +42,6 @@ body{
   justify-content:center;
   align-items:center;
   height:100vh;
-  animation:fadeIn 1s;
 }
 
 .login-box{
@@ -51,7 +50,6 @@ body{
   border-radius:15px;
   width:300px;
   text-align:center;
-  box-shadow:0 0 20px rgba(0,255,255,0.3);
 }
 
 .login-box input{
@@ -69,14 +67,12 @@ body{
   border-radius:8px;
   background:linear-gradient(45deg,#00f,#0ff);
   color:white;
-  cursor:pointer;
 }
 
 /* DASHBOARD */
 #dashboard{
   display:none;
   height:100vh;
-  animation:fadeIn 1s;
 }
 
 /* SIDEBAR */
@@ -88,10 +84,6 @@ body{
   padding:20px;
 }
 
-.sidebar h2{
-  margin-bottom:20px;
-}
-
 .sidebar button{
   width:100%;
   margin:10px 0;
@@ -100,22 +92,19 @@ body{
   border-radius:8px;
   background:#111;
   color:white;
-  cursor:pointer;
 }
 
+/* MAIN */
 .main{
   margin-left:240px;
   padding:20px;
 }
 
-/* CARD */
 .card{
   background:rgba(20,20,40,0.7);
-  backdrop-filter: blur(10px);
   padding:20px;
   border-radius:12px;
   margin-bottom:20px;
-  animation:fadeInUp 0.7s;
 }
 
 input{
@@ -131,12 +120,10 @@ button{
   padding:10px;
   border:none;
   border-radius:8px;
-  cursor:pointer;
 }
 
 .blue{background:blue;color:white;}
 .green{background:green;color:white;}
-.red{background:red;color:white;}
 
 /* PC GRID */
 .pc-grid{
@@ -153,30 +140,21 @@ button{
   cursor:pointer;
 }
 
-.pc.active{background:cyan;color:black;}
-
-/* ANIMATION */
-@keyframes fadeIn{
-  from{opacity:0}
-  to{opacity:1}
-}
-
-@keyframes fadeInUp{
-  from{opacity:0; transform:translateY(20px)}
-  to{opacity:1; transform:translateY(0)}
+.pc.active{
+  background:cyan;
+  color:black;
 }
 </style>
 </head>
 
 <body>
 
-<!-- TAMBAHAN CANVAS HUJAN -->
 <canvas id="rain"></canvas>
 
 <!-- LOGIN -->
 <div id="loginPage">
   <div class="login-box">
-    <h2>ログイン (Login)</h2>
+    <h2>Login</h2>
     <input id="user" placeholder="Username">
     <input id="pass" type="password" placeholder="Password">
     <button onclick="login()">Masuk</button>
@@ -190,6 +168,7 @@ button{
     <h2>🎮 WarnetKu</h2>
     <button onclick="show('booking')">Booking</button>
     <button onclick="show('kasir')">Kasir</button>
+    <button onclick="show('karyawan')">Karyawan</button>
     <button onclick="logout()">Logout</button>
   </div>
 
@@ -200,9 +179,7 @@ button{
       <h3>Booking PC</h3>
       <input id="nama" placeholder="Nama">
       <input id="jam" type="time">
-
       <div class="pc-grid" id="pcList"></div>
-
       <button class="blue" onclick="booking()">Booking</button>
       <p id="notif"></p>
     </div>
@@ -210,8 +187,15 @@ button{
     <!-- KASIR -->
     <div id="kasir" class="card" style="display:none;">
       <h3>Kasir</h3>
-      <p>Total: Rp <span id="total">0</span></p>
-      <button class="green" onclick="bayar()">Bayar</button>
+      <button class="green" onclick="bayar()">Bayar Semua</button>
+    </div>
+
+    <!-- KARYAWAN -->
+    <div id="karyawan" class="card" style="display:none;">
+      <h3>Data Karyawan</h3>
+      <input id="namaKaryawan" placeholder="Nama Karyawan">
+      <button class="blue" onclick="tambahKaryawan()">Tambah</button>
+      <ul id="listKaryawan"></ul>
     </div>
 
   </div>
@@ -221,7 +205,10 @@ button{
 <script>
 let selectedPC=null;
 let harga=5000;
-let total=0;
+
+/* STORAGE */
+let dataPC = JSON.parse(localStorage.getItem("pc")) || {};
+let dataKaryawan = JSON.parse(localStorage.getItem("karyawan")) || [];
 
 /* LOGIN */
 function login(){
@@ -231,6 +218,8 @@ function login(){
   if(u==="admin" && p==="123"){
     document.getElementById("loginPage").style.display="none";
     document.getElementById("dashboard").style.display="block";
+    renderPC();
+    renderKaryawan();
   }else{
     alert("Login gagal!");
   }
@@ -245,21 +234,46 @@ function logout(){
 function show(page){
   document.getElementById("booking").style.display="none";
   document.getElementById("kasir").style.display="none";
+  document.getElementById("karyawan").style.display="none";
   document.getElementById(page).style.display="block";
 }
 
-/* PC LIST */
+/* PC SYSTEM */
 let pcList=document.getElementById("pcList");
-for(let i=1;i<=8;i++){
-  let div=document.createElement("div");
-  div.innerText="PC "+i;
-  div.className="pc";
-  div.onclick=()=>{
-    document.querySelectorAll(".pc").forEach(p=>p.classList.remove("active"));
-    div.classList.add("active");
-    selectedPC=i;
-  };
-  pcList.appendChild(div);
+
+function renderPC(){
+  pcList.innerHTML="";
+
+  for(let i=1;i<=8;i++){
+    let div=document.createElement("div");
+    div.className="pc";
+
+    let status = dataPC[i]?.status || "Kosong";
+
+    div.innerHTML = `
+      PC ${i}<br>
+      <small>${status}</small><br>
+      <small id="timer${i}"></small>
+    `;
+
+    if(status==="Dipakai"){
+      div.classList.add("active");
+      startTimer(i);
+    }
+
+    div.onclick=()=>{
+      if(status==="Dipakai"){
+        alert("PC sedang dipakai!");
+        return;
+      }
+
+      document.querySelectorAll(".pc").forEach(p=>p.classList.remove("active"));
+      div.classList.add("active");
+      selectedPC=i;
+    };
+
+    pcList.appendChild(div);
+  }
 }
 
 /* BOOKING */
@@ -271,28 +285,96 @@ function booking(){
     return;
   }
 
-  total += harga;
+  let start = new Date().getTime();
+
+  dataPC[selectedPC]={
+    nama,
+    start,
+    status:"Dipakai"
+  };
+
+  localStorage.setItem("pc", JSON.stringify(dataPC));
+
+  renderPC();
 
   document.getElementById("notif").innerText=
-    "Booking berhasil PC "+selectedPC+" | +Rp"+harga;
+    "Booking PC "+selectedPC+" berhasil";
 
-  document.getElementById("total").innerText=total;
-
-  document.getElementById("nama").value="";
   selectedPC=null;
-  document.querySelectorAll(".pc").forEach(p=>p.classList.remove("active"));
 }
 
-/* BAYAR */
+/* TIMER */
+function startTimer(pc){
+  setInterval(()=>{
+    if(!dataPC[pc]) return;
+
+    let now = new Date().getTime();
+    let diff = Math.floor((now - dataPC[pc].start)/1000);
+
+    let jam = Math.floor(diff/3600);
+    let menit = Math.floor((diff%3600)/60);
+    let detik = diff%60;
+
+    let el = document.getElementById("timer"+pc);
+    if(el){
+      el.innerText = jam+"j "+menit+"m "+detik+"s";
+    }
+  },1000);
+}
+
+/* KASIR */
 function bayar(){
-  alert("Pembayaran berhasil!");
-  total=0;
-  document.getElementById("total").innerText=0;
+  let total=0;
+
+  for(let pc in dataPC){
+    let now = new Date().getTime();
+    let durasi = (now - dataPC[pc].start)/3600000;
+
+    total += Math.ceil(durasi) * harga;
+  }
+
+  alert("Total bayar: Rp "+total);
+
+  dataPC={};
+  localStorage.setItem("pc", JSON.stringify(dataPC));
+  renderPC();
 }
 
-/* =========================
-   ANIMASI HUJAN CYBERPUNK
-========================= */
+/* KARYAWAN */
+function tambahKaryawan(){
+  let nama=document.getElementById("namaKaryawan").value;
+  if(!nama) return;
+
+  dataKaryawan.push(nama);
+  localStorage.setItem("karyawan", JSON.stringify(dataKaryawan));
+  renderKaryawan();
+  document.getElementById("namaKaryawan").value="";
+}
+
+function renderKaryawan(){
+  let list=document.getElementById("listKaryawan");
+  list.innerHTML="";
+
+  dataKaryawan.forEach((k,i)=>{
+    let li=document.createElement("li");
+    li.innerText=k;
+
+    li.onclick=()=>{
+      dataKaryawan.splice(i,1);
+      localStorage.setItem("karyawan", JSON.stringify(dataKaryawan));
+      renderKaryawan();
+    };
+
+    list.appendChild(li);
+  });
+}
+
+window.onload=()=>{
+  renderPC();
+  renderKaryawan();
+};
+
+/* HUJAN */
 const canvas = document.getElementById("rain");
 const ctx = canvas.getContext("2d");
 
@@ -336,11 +418,6 @@ function drawRain(){
 }
 
 drawRain();
-
-window.addEventListener("resize", ()=>{
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
 </script>
 
 </body>
