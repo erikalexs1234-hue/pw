@@ -5,20 +5,72 @@
 <title>Warnet System Pro</title>
 
 <style>
-body{margin:0;font-family:sans-serif;background:#0f172a;color:white}
-.sidebar{width:200px;position:fixed;height:100%;background:#020617;padding:20px}
-.sidebar button{display:block;width:100%;margin:10px 0;padding:10px;background:#1e293b;color:white;border:none;cursor:pointer}
-.content{margin-left:220px;padding:20px}
-.box{background:#1e293b;padding:15px;margin:10px 0;border-radius:10px}
+body{
+  margin:0;
+  font-family:sans-serif;
+  color:white;
+
+  /* BACKGROUND TOKYO */
+  background: url("https://images.unsplash.com/photo-1549692520-acc6669e2f0c") no-repeat center center fixed;
+  background-size: cover;
+}
+
+/* overlay biar teks kebaca */
+.overlay{
+  position:fixed;
+  width:100%;
+  height:100%;
+  background: rgba(0,0,0,0.6);
+  z-index:-1;
+}
+
+.sidebar{
+  width:200px;
+  position:fixed;
+  height:100%;
+  background:rgba(2,6,23,0.9);
+  padding:20px;
+}
+.sidebar button{
+  display:block;
+  width:100%;
+  margin:10px 0;
+  padding:10px;
+  background:#1e293b;
+  color:white;
+  border:none;
+  cursor:pointer;
+}
+
+.content{
+  margin-left:220px;
+  padding:20px;
+}
+
+.box{
+  background:rgba(30,41,59,0.9);
+  padding:15px;
+  margin:10px 0;
+  border-radius:10px;
+}
+
 input,button{padding:8px;margin:5px}
-.notif{position:fixed;top:20px;right:20px;background:cyan;color:black;padding:10px;border-radius:8px}
-canvas{position:fixed;z-index:-1}
+
+.notif{
+  position:fixed;
+  top:20px;
+  right:20px;
+  background:cyan;
+  color:black;
+  padding:10px;
+  border-radius:8px;
+}
 </style>
 </head>
 
 <body>
 
-<canvas id="rain"></canvas>
+<div class="overlay"></div>
 
 <!-- LOGIN -->
 <div id="loginPage">
@@ -87,7 +139,7 @@ let currentAdmin = null;
 let harga = 5000;
 let timers = {};
 
-/* LOGIN MULTI ADMIN */
+/* LOGIN */
 function login(){
   let u = document.getElementById("user").value;
   let p = document.getElementById("pass").value;
@@ -238,7 +290,7 @@ function hapusKaryawan(i){
   renderKaryawan();
 }
 
-/* MEMBER SYSTEM */
+/* MEMBER */
 function tambahMember(){
   let nama = document.getElementById("namaMember").value;
   if(!nama) return;
@@ -282,7 +334,6 @@ function hapusMember(i){
 /* DASHBOARD */
 function renderDashboard(){
   let today = new Date().toLocaleDateString();
-
   let todayData = transaksi.filter(t=>t.tanggal==today);
   let total = todayData.reduce((a,b)=>a+b.total,0);
 
@@ -298,28 +349,6 @@ function showNotif(text){
   document.body.appendChild(n);
   setTimeout(()=>n.remove(),3000);
 }
-
-/* HUJAN */
-let c=document.getElementById("rain");
-let ctx=c.getContext("2d");
-c.height=window.innerHeight;
-c.width=window.innerWidth;
-
-let rain=[];
-for(let i=0;i<100;i++){
-  rain.push({x:Math.random()*c.width,y:Math.random()*c.height,l:Math.random()*20});
-}
-
-function draw(){
-  ctx.clearRect(0,0,c.width,c.height);
-  ctx.fillStyle="cyan";
-  rain.forEach(r=>{
-    ctx.fillRect(r.x,r.y,2,r.l);
-    r.y+=10;
-    if(r.y>c.height) r.y=0;
-  });
-}
-setInterval(draw,50);
 </script>
 
 </body>
