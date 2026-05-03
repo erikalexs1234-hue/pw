@@ -2,29 +2,42 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Warnet System</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WarnetKu Jepang Edition</title>
 
 <style>
 body{
   margin:0;
-  font-family:Arial;
-  background:url("tokyo japan.jpg") no-repeat center/cover;
+  font-family:sans-serif;
+  background:
+    linear-gradient(rgba(10,10,30,0.4), rgba(10,10,30,0.6)),
+    url('tokyo%20japan.jpg');
+  background-size:cover;
+  background-position:center;
+  background-attachment:fixed;
   color:white;
+  overflow:hidden;
 }
 
-/* ANIMASI BACKGROUND FIX */
-canvas{
+/* HUJAN */
+#rain{
   position:fixed;
   top:0;
   left:0;
-  z-index:0;
+  width:100%;
+  height:100%;
   pointer-events:none;
+  z-index:1;
+}
+
+/* UI DI ATAS HUJAN */
+.sidebar, .main, .login-box{
+  position:relative;
+  z-index:2;
 }
 
 /* LOGIN */
-.login{
-  position:relative;
-  z-index:10;
+#loginPage{
   display:flex;
   justify-content:center;
   align-items:center;
@@ -32,49 +45,104 @@ canvas{
 }
 
 .login-box{
-  background:rgba(0,0,0,0.6);
+  background:rgba(20,20,40,0.9);
   padding:30px;
   border-radius:15px;
+  width:300px;
+  text-align:center;
+}
+
+.login-box input{
+  width:100%;
+  margin:10px 0;
+  padding:10px;
+  border:none;
+  border-radius:8px;
+}
+
+.login-box button{
+  width:100%;
+  padding:10px;
+  border:none;
+  border-radius:8px;
+  background:linear-gradient(45deg,#00f,#0ff);
+  color:white;
 }
 
 /* DASHBOARD */
-.dashboard{ display:none; }
+#dashboard{
+  display:none;
+  height:100vh;
+}
 
+/* SIDEBAR */
 .sidebar{
-  position:fixed;
-  width:200px;
+  width:220px;
+  background:rgba(10,10,30,0.9);
   height:100%;
-  background:rgba(0,0,0,0.7);
+  position:fixed;
   padding:20px;
-  z-index:10;
 }
 
 .sidebar button{
   width:100%;
   margin:10px 0;
+  padding:10px;
+  border:none;
+  border-radius:8px;
+  background:#111;
+  color:white;
 }
 
+/* MAIN */
 .main{
-  margin-left:220px;
+  margin-left:240px;
   padding:20px;
-  position:relative;
-  z-index:10;
 }
 
-.box{
-  background:rgba(255,255,255,0.1);
-  padding:10px;
-  margin:10px;
-  border-radius:10px;
+.card{
+  background:rgba(20,20,40,0.7);
+  padding:20px;
+  border-radius:12px;
+  margin-bottom:20px;
 }
 
-.notif{
-  position:fixed;
-  top:20px;
-  right:20px;
-  background:red;
+input{
+  display:block;
+  margin:10px 0;
   padding:10px;
-  border-radius:10px;
+  width:100%;
+  border:none;
+  border-radius:8px;
+}
+
+button{
+  padding:10px;
+  border:none;
+  border-radius:8px;
+}
+
+.blue{background:blue;color:white;}
+.green{background:green;color:white;}
+
+/* PC GRID */
+.pc-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+}
+
+.pc{
+  padding:10px;
+  background:#222;
+  text-align:center;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.pc.active{
+  background:cyan;
+  color:black;
 }
 </style>
 </head>
@@ -84,259 +152,274 @@ canvas{
 <canvas id="rain"></canvas>
 
 <!-- LOGIN -->
-<div class="login" id="loginPage">
+<div id="loginPage">
   <div class="login-box">
-    <h2>Login Warnet</h2>
-    <input id="user" placeholder="username"><br><br>
-    <input id="pass" type="password" placeholder="password"><br><br>
-    <button onclick="login()">Login</button>
+    <h2>Login</h2>
+    <input id="user" placeholder="Username">
+    <input id="pass" type="password" placeholder="Password">
+    <button onclick="login()">Masuk</button>
   </div>
 </div>
 
 <!-- DASHBOARD -->
-<div class="dashboard" id="app">
+<div id="dashboard">
 
   <div class="sidebar">
-    <h3>Menu</h3>
+    <h2>🎮 WarnetKu</h2>
     <button onclick="show('booking')">Booking</button>
     <button onclick="show('kasir')">Kasir</button>
     <button onclick="show('karyawan')">Karyawan</button>
-    <button onclick="show('billing')">Billing</button>
+    <button onclick="logout()">Logout</button>
   </div>
 
   <div class="main">
 
     <!-- BOOKING -->
-    <div id="booking">
-      <h2>Booking PC</h2>
-      <div id="listPC"></div>
+    <div id="booking" class="card">
+      <h3>Booking PC</h3>
+      <input id="nama" placeholder="Nama">
+      <input id="jam" type="time">
+      <div class="pc-grid" id="pcList"></div>
+      <button class="blue" onclick="booking()">Booking</button>
+      <p id="notif"></p>
     </div>
 
     <!-- KASIR -->
-    <div id="kasir" style="display:none">
-      <h2>Kasir</h2>
-      <div id="laporan"></div>
+    <div id="kasir" class="card" style="display:none;">
+      <h3>Kasir</h3>
+      <button class="green" onclick="bayar()">Bayar Semua</button>
     </div>
 
     <!-- KARYAWAN -->
-    <div id="karyawan" style="display:none">
-      <h2>Data Karyawan</h2>
-      <input id="namaKaryawan" placeholder="Nama">
-      <button onclick="tambahKaryawan()">Tambah</button>
-      <div id="listKaryawan"></div>
-    </div>
-
-    <!-- BILLING -->
-    <div id="billing" style="display:none">
-      <h2>Daftar Harga Billing</h2>
-
-      <div class="box">PC Reguler : Rp 5.000 / jam</div>
-      <div class="box">PC Gaming : Rp 10.000 / jam</div>
-      <div class="box">VIP Room : Rp 15.000 / jam</div>
+    <div id="karyawan" class="card" style="display:none;">
+      <h3>Data Karyawan</h3>
+      <input id="namaKaryawan" placeholder="Nama Karyawan">
+      <button class="blue" onclick="tambahKaryawan()">Tambah</button>
+      <ul id="listKaryawan"></ul>
     </div>
 
   </div>
+
 </div>
 
 <script>
+let selectedPC=null;
+let harga=5000;
+
+/* STORAGE */
 let dataPC = JSON.parse(localStorage.getItem("pc")) || {};
-let karyawan = JSON.parse(localStorage.getItem("karyawan")) || [];
-let harga = 5000;
-let timers = {}; // FIX TIMER DOBEL
+let dataKaryawan = JSON.parse(localStorage.getItem("karyawan")) || [];
 
 /* LOGIN */
 function login(){
-  let u = document.getElementById("user").value;
-  let p = document.getElementById("pass").value;
+  let u=document.getElementById("user").value;
+  let p=document.getElementById("pass").value;
 
-  if(u && p){
+  if(u==="admin" && p==="123"){
     document.getElementById("loginPage").style.display="none";
-    document.getElementById("app").style.display="block";
+    document.getElementById("dashboard").style.display="block";
     renderPC();
     renderKaryawan();
   }else{
-    alert("Isi dulu!");
+    alert("Login gagal!");
   }
+}
+
+/* LOGOUT */
+function logout(){
+  location.reload();
 }
 
 /* NAV */
-function show(menu){
-  ["booking","kasir","karyawan","billing"].forEach(id=>{
-    let el = document.getElementById(id);
-    if(el) el.style.display="none";
-  });
-  document.getElementById(menu).style.display="block";
+function show(page){
+  document.getElementById("booking").style.display="none";
+  document.getElementById("kasir").style.display="none";
+  document.getElementById("karyawan").style.display="none";
+  document.getElementById(page).style.display="block";
 }
 
-/* BOOKING */
+/* PC SYSTEM */
+let pcList=document.getElementById("pcList");
+
 function renderPC(){
-  let list = document.getElementById("listPC");
-  list.innerHTML="";
+  pcList.innerHTML="";
 
-  for(let i=1;i<=5;i++){
-    let pc = dataPC[i];
-    let div = document.createElement("div");
-    div.className="box";
+  for(let i=1;i<=8;i++){
+    let div=document.createElement("div");
+    div.className="pc";
 
-    if(pc){
-      div.innerHTML=`
-        PC ${i} - Dipakai<br>
-        <span id="timer${i}"></span><br>
-        <button onclick="stopPC(${i})">Stop</button>
-      `;
+    let status = dataPC[i]?.status || "Kosong";
+
+    div.innerHTML = `
+      PC ${i}<br>
+      <small>${status}</small><br>
+      <small id="timer${i}"></small>
+    `;
+
+    if(status==="Dipakai"){
+      div.classList.add("active");
       startTimer(i);
-    }else{
-      div.innerHTML=`
-        PC ${i} - Kosong<br>
-        Durasi: <input id="durasi${i}" type="number"><br>
-        <button onclick="bookingPC(${i})">Booking</button>
-      `;
     }
 
-    list.appendChild(div);
+    div.onclick=()=>{
+      if(status==="Dipakai"){
+        alert("PC sedang dipakai!");
+        return;
+      }
+
+      document.querySelectorAll(".pc").forEach(p=>p.classList.remove("active"));
+      div.classList.add("active");
+      selectedPC=i;
+    };
+
+    pcList.appendChild(div);
   }
 }
 
-function bookingPC(pc){
-  let input = document.getElementById("durasi"+pc);
-  let d = input ? input.value : null;
+/* BOOKING */
+function booking(){
+  let nama=document.getElementById("nama").value;
 
-  if(!d) return alert("Isi durasi!");
+  if(!nama || !selectedPC){
+    alert("Lengkapi data!");
+    return;
+  }
 
-  dataPC[pc]={ start:Date.now(), durasi:parseInt(d) };
+  let start = new Date().getTime();
+
+  dataPC[selectedPC]={
+    nama,
+    start,
+    status:"Dipakai"
+  };
+
   localStorage.setItem("pc", JSON.stringify(dataPC));
+
   renderPC();
+
+  document.getElementById("notif").innerText=
+    "Booking PC "+selectedPC+" berhasil";
+
+  selectedPC=null;
 }
 
 /* TIMER */
 function startTimer(pc){
+  setInterval(()=>{
+    if(!dataPC[pc]) return;
 
-  if(timers[pc]) clearInterval(timers[pc]);
+    let now = new Date().getTime();
+    let diff = Math.floor((now - dataPC[pc].start)/1000);
 
-  timers[pc] = setInterval(()=>{
-    if(!dataPC[pc]){
-      clearInterval(timers[pc]);
-      return;
-    }
-
-    let data = dataPC[pc];
-    let elapsed = Math.floor((Date.now()-data.start)/1000);
-    let total = data.durasi*3600;
-    let sisa = total - elapsed;
+    let jam = Math.floor(diff/3600);
+    let menit = Math.floor((diff%3600)/60);
+    let detik = diff%60;
 
     let el = document.getElementById("timer"+pc);
-
-    if(sisa <= 0){
-      showNotif("PC "+pc+" waktu habis!");
-
-      delete dataPC[pc];
-      localStorage.setItem("pc", JSON.stringify(dataPC));
-
-      clearInterval(timers[pc]);
-      renderPC();
-      return;
+    if(el){
+      el.innerText = jam+"j "+menit+"m "+detik+"s";
     }
-
-    let m = Math.floor(elapsed/60);
-    let s = elapsed%60;
-
-    if(el) el.innerText = m+"m "+s+"s";
-
   },1000);
 }
 
-/* STOP */
-function stopPC(pc){
-  let data = dataPC[pc];
-  if(!data) return;
+/* KASIR */
+function bayar(){
+  let total=0;
 
-  let totalBayar = data.durasi * harga;
-  alert("Total bayar: Rp "+totalBayar);
+  for(let pc in dataPC){
+    let now = new Date().getTime();
+    let durasi = (now - dataPC[pc].start)/3600000;
 
-  delete dataPC[pc];
+    total += Math.ceil(durasi) * harga;
+  }
+
+  alert("Total bayar: Rp "+total);
+
+  dataPC={};
   localStorage.setItem("pc", JSON.stringify(dataPC));
-
-  if(timers[pc]) clearInterval(timers[pc]);
-
   renderPC();
 }
 
 /* KARYAWAN */
 function tambahKaryawan(){
-  let input = document.getElementById("namaKaryawan");
-  let nama = input.value;
+  let nama=document.getElementById("namaKaryawan").value;
+  if(!nama) return;
 
-  if(!nama) return alert("Isi nama!");
-
-  karyawan.push(nama);
-  localStorage.setItem("karyawan", JSON.stringify(karyawan));
-
-  input.value="";
+  dataKaryawan.push(nama);
+  localStorage.setItem("karyawan", JSON.stringify(dataKaryawan));
   renderKaryawan();
+  document.getElementById("namaKaryawan").value="";
 }
 
 function renderKaryawan(){
-  let list = document.getElementById("listKaryawan");
+  let list=document.getElementById("listKaryawan");
   list.innerHTML="";
 
-  karyawan.forEach((k,i)=>{
-    let div = document.createElement("div");
-    div.className="box";
+  dataKaryawan.forEach((k,i)=>{
+    let li=document.createElement("li");
+    li.innerText=k;
 
-    div.innerHTML = `
-      ${k}
-      <button onclick="hapusKaryawan(${i})">Hapus</button>
-    `;
+    li.onclick=()=>{
+      dataKaryawan.splice(i,1);
+      localStorage.setItem("karyawan", JSON.stringify(dataKaryawan));
+      renderKaryawan();
+    };
 
-    list.appendChild(div);
+    list.appendChild(li);
   });
 }
 
-function hapusKaryawan(i){
-  karyawan.splice(i,1);
-  localStorage.setItem("karyawan", JSON.stringify(karyawan));
+window.onload=()=>{
+  renderPC();
   renderKaryawan();
-}
+};
 
-/* NOTIF */
-function showNotif(text){
-  let n = document.createElement("div");
-  n.className="notif";
-  n.innerText=text;
+/* HUJAN */
+const canvas = document.getElementById("rain");
+const ctx = canvas.getContext("2d");
 
-  document.body.appendChild(n);
-  setTimeout(()=>n.remove(),3000);
-}
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-/* ANIMASI HUJAN */
-let c = document.getElementById("rain");
-let ctx = c.getContext("2d");
+let rainDrops = [];
 
-c.height = window.innerHeight;
-c.width = window.innerWidth;
-
-let rain = [];
-for(let i=0;i<100;i++){
-  rain.push({
-    x:Math.random()*c.width,
-    y:Math.random()*c.height,
-    l:Math.random()*20
+for(let i=0;i<180;i++){
+  rainDrops.push({
+    x: Math.random()*canvas.width,
+    y: Math.random()*canvas.height,
+    length: Math.random()*20,
+    speed: Math.random()*4+4
   });
 }
 
-function draw(){
-  ctx.clearRect(0,0,c.width,c.height);
-  ctx.fillStyle="cyan";
+function drawRain(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  rain.forEach(r=>{
-    ctx.fillRect(r.x,r.y,2,r.l);
-    r.y+=10;
-    if(r.y>c.height) r.y=0;
-  });
+  ctx.strokeStyle="rgba(0,255,255,0.4)";
+  ctx.lineWidth=1;
+
+  for(let i=0;i<rainDrops.length;i++){
+    let r = rainDrops[i];
+
+    ctx.beginPath();
+    ctx.moveTo(r.x,r.y);
+    ctx.lineTo(r.x,r.y+r.length);
+    ctx.stroke();
+
+    r.y += r.speed;
+
+    if(r.y > canvas.height){
+      r.y = 0;
+      r.x = Math.random()*canvas.width;
+    }
+  }
+
+  requestAnimationFrame(drawRain);
 }
 
-setInterval(draw,50);
+drawRain();
 </script>
 
 </body>
 </html>
+```
